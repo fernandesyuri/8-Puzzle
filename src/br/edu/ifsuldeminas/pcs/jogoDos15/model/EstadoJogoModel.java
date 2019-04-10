@@ -42,6 +42,43 @@ public class EstadoJogoModel implements Comparable<EstadoJogoModel>{
             }
         }
     }
+    
+    public void calcularHeuristicaManhattan(){
+        int count=0;
+        for(int i=0;i<3;i++){
+            for(int j=0;j<3;j++){
+                if(null!=this.jogo[i][j])switch (this.jogo[i][j]) {
+                    case 1:
+                        count+=Math.abs(i-0)+Math.abs(j-1);
+                        break;
+                    case 2:
+                        count+=Math.abs(i-0)+Math.abs(j-2);
+                        break;
+                    case 3:
+                        count+=Math.abs(i-1)+Math.abs(j-0);
+                        break;
+                    case 4:
+                        count+=Math.abs(i-1)+Math.abs(j-1);
+                        break;
+                    case 5:
+                        count+=Math.abs(i-1)+Math.abs(j-2);
+                        break;
+                    case 6:
+                        count+=Math.abs(i-2)+Math.abs(j-0);
+                        break;
+                    case 7:
+                        count+=Math.abs(i-2)+Math.abs(j-1);
+                        break;
+                    case 8:
+                        count+=Math.abs(i-2)+Math.abs(j-2);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        this.valorHeuristica=count;
+    }
 
     public String jogoEmString() {
         String jogoString = new String();
@@ -77,9 +114,9 @@ public class EstadoJogoModel implements Comparable<EstadoJogoModel>{
             clone.jogo[i0 - 1][j0] = clone.jogo[i0][j0];
             clone.jogo[i0][j0] = aux;
             String jogoString = clone.jogoEmString();
-            System.out.println(jogoString);
             if (estadosJaGerados.add(jogoString)) {
                 clone.pai = this;
+                clone.calcularHeuristicaManhattan();
                 filhos.add(clone);
             }
         }
@@ -90,9 +127,9 @@ public class EstadoJogoModel implements Comparable<EstadoJogoModel>{
             clone.jogo[i0 + 1][j0] = clone.jogo[i0][j0];
             clone.jogo[i0][j0] = aux;
             String jogoString = clone.jogoEmString();
-            System.out.println(jogoString);
             if (estadosJaGerados.add(jogoString)) {
                 clone.pai = this;
+                clone.calcularHeuristicaManhattan();
                 filhos.add(clone);
             }
         }
@@ -103,9 +140,9 @@ public class EstadoJogoModel implements Comparable<EstadoJogoModel>{
             clone.jogo[i0][j0 + 1] = clone.jogo[i0][j0];
             clone.jogo[i0][j0] = aux;
             String jogoString = clone.jogoEmString();
-            System.out.println(jogoString);
             if (estadosJaGerados.add(jogoString)) {
                 clone.pai = this;
+                clone.calcularHeuristicaManhattan();
                 filhos.add(clone);
             }
         }
@@ -116,9 +153,9 @@ public class EstadoJogoModel implements Comparable<EstadoJogoModel>{
             clone.jogo[i0][j0 - 1] = clone.jogo[i0][j0];
             clone.jogo[i0][j0] = aux;
             String jogoString = clone.jogoEmString();
-            System.out.println(jogoString);
             if (estadosJaGerados.add(jogoString)) {
                 clone.pai = this;
+                clone.calcularHeuristicaManhattan();
                 filhos.add(clone);
             }
         }
@@ -142,6 +179,10 @@ public class EstadoJogoModel implements Comparable<EstadoJogoModel>{
 
         System.out.println("Estado inicial: " + e.jogoEmString());
         ArrayList<EstadoJogoModel> teste = e.gerarFilhos(todosOsEstadosJaGerados);
+        for(EstadoJogoModel e1 : teste){
+            System.out.println(e1.jogoEmString());
+            System.out.println(e1.valorHeuristica);
+        }
 
         for (EstadoJogoModel e1 : teste) {
             JogoView view = new JogoView(e1.getJogo());
