@@ -3,6 +3,9 @@ package br.edu.ifsuldeminas.pcs.jogoDos8;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
@@ -17,8 +20,9 @@ public class JogoView extends JFrame {
     private static final Color COR_NUMERO_BOTAO = Color.WHITE;
     private static final Font FONTE_BOTAO = new Font("Tahoma", Font.PLAIN, 60);
 
-    // Representa as casas no tabuleiro.
-    private JButton casas[][];
+    private EstadoJogo estadoAtual;
+    private JButton casas[][]; // Representa as casas no tabuleiro.
+    private JButton primeiroBotaoPressionado;
 
     /**
      * Permite criar uma janela gráfica que representa o tabuleiro do jogo da
@@ -26,25 +30,19 @@ public class JogoView extends JFrame {
      *
      * @param estadoInicial Matriz de integer 3x3
      */
-    public JogoView(Integer[][] estadoInicial) {
+    public JogoView(EstadoJogo estadoInicial) {
+        this.estadoAtual = estadoInicial;
+        this.primeiroBotaoPressionado = null;
         inicializarJanela();
         reposicionarCasas(estadoInicial);
     }
 
     public static void main(String[] args) {
 
-        Integer[][] teste = new Integer[3][3];
-        teste[0][0] = 1;
-        teste[0][1] = 2;
-        teste[0][2] = 3;
-        teste[1][0] = 4;
-        teste[1][1] = 5;
-        teste[1][2] = 6;
-        teste[2][0] = 7;
-        teste[2][1] = 8;
-        teste[2][2] = null;
+        EstadoJogo estadoJogo = new EstadoJogo();
+        estadoJogo.gerarEstadoInicial();
 
-        JogoView jogoView = new JogoView(teste);
+        JogoView jogoView = new JogoView(estadoJogo);
     }
 
     // Inicializa as configurações iniciais da janela gráfica do jogo.
@@ -58,9 +56,9 @@ public class JogoView extends JFrame {
 
     /**
      *
-     * @param estado Matriz 3x3 de Integer
+     * @param estado Estado do jogo
      */
-    public final void reposicionarCasas(Integer[][] estado) {
+    public final void reposicionarCasas(EstadoJogo estado) {
 
         // Remove tudo o que já está no tabuleiro
         if (casas != null) {
@@ -76,10 +74,12 @@ public class JogoView extends JFrame {
         // Posiciona as novas casas no tabuleiro
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                casas[i][j] = new JButton(estado[i][j] != null ? estado[i][j].toString() : "");
+                casas[i][j] = new JButton(estado.getJogo()[i][j] != null ? estado.getJogo()[i][j].toString() : "");
                 casas[i][j].setBackground(COR_FUNDO_BOTAO);
                 casas[i][j].setForeground(COR_NUMERO_BOTAO);
                 casas[i][j].setFont(FONTE_BOTAO);
+                addEvento(casas[i][j]);
+
                 add(casas[i][j]); // Adiciona casa na janela gráfica.
             }
         }
@@ -87,5 +87,75 @@ public class JogoView extends JFrame {
         // Atualiza a view
         revalidate();
         repaint();
+    }
+
+    private void addEvento(JButton casa) {
+
+        casa.addActionListener((ActionEvent ae) -> {
+
+            if (primeiroBotaoPressionado == null) {
+                primeiroBotaoPressionado = casa;
+                System.out.println("Primeiro botão pressionado: " + casa.getText());
+
+            } else {
+
+                // Procurando a posição das casas na matriz
+                int i1 = -1, j1 = -1, i2 = -1, j2 = -1;
+                for (int i = 0; i < 3; i++) {
+                    for (int j = 0; j < 3; j++) {
+                        if (casas[i][j].getText().equals(primeiroBotaoPressionado.getText())) {
+                            i1 = i;
+                            j1 = j;
+                        } else if (casas[i][j].getText().equals(casa.getText())) {
+                            i2 = i;
+                            j2 = j;
+                        }
+                        if (i1 != -1 && i2 != -1) {
+                            i = 3;
+                            j = 3;
+                        }
+                    }
+                }
+
+                ArrayList<EstadoJogo> filhos = estadoAtual.gerarFilhos();
+
+                Integer[][] estadoPretendido = new Integer[3][3];
+                for (int i = 0; i < 3; i++) {
+                    for (int j = 0; j < 3; j++) {
+                        if (i == i1 && j == j1) {
+                            estadoPretendido[i][j] = casas[i2][j2].getText().equals("") ? null : Integer.valueOf(casas[i2][j2].getText());
+                        } else if (i == i2 && j == j2) {
+                            estadoPretendido[i][j] = casas[i1][j1].getText().equals("") ? null : Integer.valueOf(casas[i1][j1].getText());
+                        } else {
+                            estadoPretendido[i][j] = casas[i][j].getText().equals("") ? null : Integer.valueOf(casas[i][j].getText());
+                        }
+                    }
+                }
+
+                for (EstadoJogo filho : filhos) {
+                    boolean ehFilho = true;
+                    for (int i = 0; i < 3; i++) {
+                        for (int j = 0; j < 3; j++) {
+                            if (filho.getJogo()[i][j] != estadoPretendido[i][j]) {
+                                ehFilho = false;
+                                i = 3;
+                                j = 3;
+                            }
+                        }
+                    }
+                    if (ehFilho) {
+                        EstadoJogo novoEstado = new EstadoJogo(estadoPretendido, estadoAtual);
+                        estadoAtual = novoEstado;
+                        reposicionarCasas(estadoAtual);
+                        break;
+                    }
+                }
+
+                primeiroBotaoPressionado = null;
+
+                System.out.println("Primeiro botão pressionado: " + i1 + "," + j1);
+                System.out.println("Segundo botão pressionado: " + i2 + "," + j2);
+            }
+        });
     }
 }

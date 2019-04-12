@@ -20,6 +20,14 @@ public class EstadoJogo implements Comparable<EstadoJogo> {
         this.nivel = 0;
         this.estadosJaGerados = new HashSet<>();
     }
+    
+    public EstadoJogo(Integer[][] jogo, EstadoJogo pai) {
+        this.pai = pai;
+        this.jogo = jogo;
+        this.valorHeuristica = null;
+        this.nivel = pai.getNivel() + 1;
+        this.estadosJaGerados = new HashSet<>();
+    }
 
     public EstadoJogo clonar() {
         EstadoJogo clone = new EstadoJogo();
