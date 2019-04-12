@@ -1,4 +1,4 @@
-package br.edu.ifsuldeminas.pcs.jogoDos15.view;
+package br.edu.ifsuldeminas.pcs.jogoDos8;
 
 import java.awt.Color;
 import java.awt.Font;
