@@ -3,6 +3,7 @@ package br.edu.ifsuldeminas.pcs.jogoDos8;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
+import java.util.Stack;
 
 public class EstadoJogo implements Comparable<EstadoJogo> {
 
@@ -184,6 +185,10 @@ public class EstadoJogo implements Comparable<EstadoJogo> {
         return this.valorHeuristica;
     }
 
+    public Integer getNivel() {
+        return nivel;
+    }
+
     public void imprimeEstado() {
         System.out.println(jogoEmString());
     }
@@ -196,17 +201,50 @@ public class EstadoJogo implements Comparable<EstadoJogo> {
         if (t.getValorHeuristica() > getValorHeuristica()) {
             return -1;
         }
+        if (t.getValorHeuristica() == getValorHeuristica()) {
+            if (t.getNivel() < getNivel()) {
+                return -1;
+            }
+            if (t.getNivel() > getNivel()) {
+                return 1;
+            }
+        }
         return 0;
     }
 
-    public static void main(String args[])
-    {
+    public static void main(String args[]) {
         EstadoJogo e = new EstadoJogo();
-        e.gerarEstadoInicial();
-        System.out.println("oi");
-        e.imprimeEstado();
+        e.jogo[0][0] = 3;
+        e.jogo[0][1] = 1;
+        e.jogo[0][2] = 2;
+        e.jogo[1][0] = 4;
+        e.jogo[1][1] = null;
+        e.jogo[1][2] = 5;
+        e.jogo[2][0] = 6;
+        e.jogo[2][1] = 7;
+        e.jogo[2][2] = 8;
+        
         JogoView view = new JogoView(e.getJogo());
+
+        EstadoJogo objetivo = new EstadoJogo();
+        int count = 0;
+        for (int i = 0; i < 3; i++) {
+            for(int j = 0; j < 3; j++) {
+                objetivo.jogo[i][j] = count++;
+            }
+        }
+        
         Busca busca = new Busca();
-        busca.buscaGulosa(e);
+        EstadoJogo solucao = busca.buscaGulosa(e, objetivo);
+        
+        Stack<EstadoJogo> pilha = new Stack<>();
+        do {
+            pilha.push(solucao);
+            solucao = solucao.pai;
+        } while(solucao.pai != null);
+        
+        while(!(pilha.isEmpty())) {
+            System.out.println(pilha.pop().jogoEmString());
+        }
     }
 }

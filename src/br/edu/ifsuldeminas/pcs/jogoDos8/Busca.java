@@ -5,20 +5,23 @@ import java.util.Collections;
 
 public class Busca {
 
-    ArrayList<EstadoJogo> filhos;
+    ArrayList<EstadoJogo> nosAbertos;
+    ArrayList<EstadoJogo> nosFechados;
 
-    public EstadoJogo buscaGulosa(EstadoJogo estado) {
-        filhos = estado.gerarFilhos();
-        Collections.sort(filhos);
+    public EstadoJogo buscaGulosa(EstadoJogo estado, EstadoJogo objetivo) {
+        this.nosFechados = new ArrayList<>();
+        this.nosAbertos = new ArrayList<>();
+        this.nosAbertos.add(estado);
 
-        for (EstadoJogo i : filhos) {
-
+        while (true) {
+            EstadoJogo estadoAtual = nosAbertos.remove(0);
+            if (estadoAtual.jogoEmString().equals(objetivo.jogoEmString())) {
+                return estadoAtual;
+            } else {
+                nosAbertos.addAll(estadoAtual.gerarFilhos());
+                Collections.sort(this.nosAbertos);
+                nosFechados.add(estadoAtual);
+            }
         }
-
-//        for(EstadoJogo i: filhos) {
-//            System.out.println(i.jogoEmString());
-//            System.out.println(i.getValorHeuristica());
-//        }
-        return null;
     }
 }
