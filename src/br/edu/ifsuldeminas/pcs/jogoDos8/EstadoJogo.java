@@ -8,11 +8,13 @@ import java.util.Stack;
 
 public class EstadoJogo implements Comparable<EstadoJogo> {
 
-    private EstadoJogo pai;
+    public EstadoJogo pai;
     private Integer jogo[][];
     private Integer valorHeuristica;
     private Integer nivel;
     private HashSet<String> estadosJaGerados;
+    private ArrayList<EstadoJogo> filhos;
+
 
     public EstadoJogo() {
         this.pai = null;
@@ -20,8 +22,16 @@ public class EstadoJogo implements Comparable<EstadoJogo> {
         this.valorHeuristica = null;
         this.nivel = 0;
         this.estadosJaGerados = new HashSet<>();
+        this.filhos = new ArrayList<>();
     }
-
+    
+    public void addFilho(EstadoJogo clonado) {
+        clonado.pai = this;
+        this.filhos.add(clonado);
+        //clonado.imprimeEstado();
+        //clonado.pai.imprimeEstado();
+    }
+    
     public EstadoJogo(Integer[][] jogo, EstadoJogo pai) {
         this.pai = pai;
         this.jogo = jogo;
@@ -109,7 +119,6 @@ public class EstadoJogo implements Comparable<EstadoJogo> {
     }
 
     public ArrayList<EstadoJogo> gerarFilhos() {
-        ArrayList<EstadoJogo> filhos = new ArrayList<>();
         int i0 = -1, j0 = -1;
         EstadoJogo clone = this.clonar();
         for (int i = 0; i < 3; i++) {
@@ -134,7 +143,7 @@ public class EstadoJogo implements Comparable<EstadoJogo> {
                 clone.pai = this;
                 clone.calcularHeuristicaManhattan();
                 clone.nivel = this.nivel + 1;
-                filhos.add(clone);
+                addFilho(clone);
             }
         }
         //troca 0 com o valor de baixo
@@ -148,7 +157,7 @@ public class EstadoJogo implements Comparable<EstadoJogo> {
                 clone.pai = this;
                 clone.calcularHeuristicaManhattan();
                 clone.nivel = this.nivel + 1;
-                filhos.add(clone);
+                addFilho(clone);
             }
         }
         //troca 0 com o valor a direita
@@ -162,7 +171,7 @@ public class EstadoJogo implements Comparable<EstadoJogo> {
                 clone.pai = this;
                 clone.calcularHeuristicaManhattan();
                 clone.nivel = this.nivel + 1;
-                filhos.add(clone);
+                addFilho(clone);
             }
         }
         //troca 0 com o valor a esquerda
@@ -176,10 +185,10 @@ public class EstadoJogo implements Comparable<EstadoJogo> {
                 clone.pai = this;
                 clone.calcularHeuristicaManhattan();
                 clone.nivel = this.nivel + 1;
-                filhos.add(clone);
+                addFilho(clone);
             }
         }
-        return filhos;
+        return this.filhos;
     }
 
     public void resetarEstadosJaGerados() {
@@ -222,7 +231,14 @@ public class EstadoJogo implements Comparable<EstadoJogo> {
     }
 
     public void imprimeEstado() {
-        System.out.println(jogoEmString());
+        for (int i = 0; i < jogoEmString().length(); i++) {
+            if (i == 3 || i == 6) {
+                System.out.print("\n"+jogoEmString().charAt(i));
+            } else {
+                System.out.print(jogoEmString().charAt(i));
+            }
+        }
+        System.out.println("\n");
     }
 
     @Override
@@ -256,6 +272,16 @@ public class EstadoJogo implements Comparable<EstadoJogo> {
         e.jogo[2][1] = 7;
         e.jogo[2][2] = 8;
 
+//        e.jogo[0][0] = 1;
+//        e.jogo[0][1] = 3;
+//        e.jogo[0][2] = 2;
+//        e.jogo[1][0] = 4;
+//        e.jogo[1][1] = null;
+//        e.jogo[1][2] = 5;
+//        e.jogo[2][0] = 6;
+//        e.jogo[2][1] = 7;
+//        e.jogo[2][2] = 8;
+
         JogoView view = new JogoView(e);
 
         EstadoJogo objetivo = new EstadoJogo();
@@ -265,7 +291,8 @@ public class EstadoJogo implements Comparable<EstadoJogo> {
                 objetivo.jogo[i][j] = count++;
             }
         }
-
+        //e.imprimeEstado();
+        
         Busca busca = new Busca();
         EstadoJogo solucao = busca.buscaGulosa(e, objetivo);
 
@@ -273,10 +300,13 @@ public class EstadoJogo implements Comparable<EstadoJogo> {
         do {
             pilha.push(solucao);
             solucao = solucao.pai;
-        } while (solucao.pai != null);
-
-        while (!(pilha.isEmpty())) {
-            System.out.println(pilha.pop().jogoEmString());
+        } while(solucao != null);
+        
+        System.out.println("Caminho para chegar no resultado:");
+        
+        while(!(pilha.isEmpty())) {
+            System.out.println("Estado: ");
+            pilha.pop().imprimeEstado();
         }
     }
 }
