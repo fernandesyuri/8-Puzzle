@@ -5,7 +5,6 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -26,6 +25,7 @@ public class JogoView extends JFrame {
     private EstadoJogo estadoAtual;
     private JButton casas[][]; // Representa as casas no tabuleiro.
     private JButton primeiroBotaoPressionado;
+    private int contadorJogadas;
 
     /**
      * Permite criar uma janela gráfica que representa o tabuleiro do jogo da
@@ -36,6 +36,7 @@ public class JogoView extends JFrame {
     public JogoView(EstadoJogo estadoInicial) {
         this.estadoAtual = estadoInicial;
         this.primeiroBotaoPressionado = null;
+        this.contadorJogadas = 0;
         inicializarJanela();
         reposicionarCasas(estadoInicial);
     }
@@ -157,9 +158,11 @@ public class JogoView extends JFrame {
                         estadoAtual = novoEstado;
                         reposicionarCasas(estadoAtual);
                         
+                        contadorJogadas++;
+                        
                         // Verifica se atingiu um estado final
                         if(estadoAtual.ehEstadoFinal()) {
-                            JOptionPane.showMessageDialog(this, "Fim de jogo!");
+                            JOptionPane.showMessageDialog(this, "Fim de jogo! Total de jogadas: " + contadorJogadas);
                         }
                         
                         break;
