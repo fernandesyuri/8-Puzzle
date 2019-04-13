@@ -89,6 +89,8 @@ public class JogoView extends JFrame {
                 add(casas[i][j]); // Adiciona casa na janela gráfica.
             }
         }
+        
+        estadoAtual = estado;
 
         // Atualiza a view
         revalidate();
