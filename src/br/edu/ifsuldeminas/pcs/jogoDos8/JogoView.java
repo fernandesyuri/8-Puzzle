@@ -1,6 +1,7 @@
 package br.edu.ifsuldeminas.pcs.jogoDos8;
 
 import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -8,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -17,7 +19,8 @@ public class JogoView extends JFrame {
 
     // Cores sobre os botões que representam as casas do tabuleiro.
     private static final Color COR_FUNDO_BOTAO = new Color(66, 134, 244);
-    private static final Color COR_NUMERO_BOTAO = Color.WHITE;
+    private static final Color COR_FUNDO_BOTAO_PRESSIONADO = Color.LIGHT_GRAY;
+    private static final Color COR_NUMERO_BOTAO = /*Color.WHITE*/Color.BLACK;
     private static final Font FONTE_BOTAO = new Font("Tahoma", Font.PLAIN, 60);
 
     private EstadoJogo estadoAtual;
@@ -47,9 +50,12 @@ public class JogoView extends JFrame {
 
     // Inicializa as configurações iniciais da janela gráfica do jogo.
     private void inicializarJanela() {
-        setLayout(new GridLayout(3, 3));
+        
+        setLayout(new FlowLayout());
         setSize(500, 500);
-        setTitle("Jogo dos 15 (só que com 8)");
+        
+        setLayout(new GridLayout(3, 3));
+        setTitle("8-Puzzle");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
     }
@@ -95,9 +101,10 @@ public class JogoView extends JFrame {
 
             if (primeiroBotaoPressionado == null) {
                 primeiroBotaoPressionado = casa;
-                System.out.println("Primeiro botão pressionado: " + casa.getText());
+                primeiroBotaoPressionado.setBackground(COR_FUNDO_BOTAO_PRESSIONADO);
+                //System.out.println("Primeiro botão pressionado: " + casa.getText());
 
-            } else {
+            } else if(!primeiroBotaoPressionado.getText().equals(casa.getText())) {
 
                 // Procurando a posição das casas na matriz
                 int i1 = -1, j1 = -1, i2 = -1, j2 = -1;
@@ -147,14 +154,27 @@ public class JogoView extends JFrame {
                         EstadoJogo novoEstado = new EstadoJogo(estadoPretendido, estadoAtual);
                         estadoAtual = novoEstado;
                         reposicionarCasas(estadoAtual);
+                        
+                        // Verifica se atingiu um estado final
+                        if(estadoAtual.ehEstadoFinal()) {
+                            JOptionPane.showMessageDialog(this, "Fim de jogo!");
+                        }
+                        
                         break;
+                    } else {
                     }
                 }
 
+                primeiroBotaoPressionado.setBackground(COR_FUNDO_BOTAO);
                 primeiroBotaoPressionado = null;
+                estadoAtual.resetarEstadosJaGerados();
 
                 System.out.println("Primeiro botão pressionado: " + i1 + "," + j1);
                 System.out.println("Segundo botão pressionado: " + i2 + "," + j2);
+            } else {
+                // Clicou no mesmo botão duas vezes
+                primeiroBotaoPressionado.setBackground(COR_FUNDO_BOTAO);
+                primeiroBotaoPressionado = null;
             }
         });
     }
