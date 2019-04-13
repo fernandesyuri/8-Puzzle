@@ -2,6 +2,7 @@ package br.edu.ifsuldeminas.pcs.jogoDos8;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Random;
 import java.util.Stack;
 
@@ -186,21 +187,21 @@ public class EstadoJogo implements Comparable<EstadoJogo> {
     }
 
     public boolean ehEstadoFinal() {
-        
+
         // 1 2 3 4 5 6 7 8 0
-        if (jogo[0][0] == null && jogo[0][1] == 1 && jogo[0][2] == 2
-                && jogo[1][0] == 3 && jogo[1][1] == 4 && jogo[1][2] == 5
-                && jogo[2][0] == 6 && jogo[2][1] == 7 && jogo[2][2] == 8) {
+        if (Objects.equals(jogo[0][0], null) && Objects.equals(jogo[0][1], 1) && Objects.equals(jogo[0][2], 2)
+                && Objects.equals(jogo[1][0], 3) && Objects.equals(jogo[1][1], 4) && Objects.equals(jogo[1][2], 5)
+                && Objects.equals(jogo[2][0], 6) && Objects.equals(jogo[2][1], 7) && Objects.equals(jogo[2][2], 8)) {
             return true;
         }
-        
+
         // 0 1 2 3 4 5 6 7 8
-        if (jogo[0][0] == 1 && jogo[0][1] == 2 && jogo[0][2] == 3
-                && jogo[1][0] == 4 && jogo[1][1] == 5 && jogo[1][2] == 6
-                && jogo[2][0] == 7 && jogo[2][1] == 8 && jogo[2][2] == null) {
+        if (Objects.equals(jogo[0][0], 1) && Objects.equals(jogo[0][1], 2) && Objects.equals(jogo[0][2], 3)
+                && Objects.equals(jogo[1][0], 4) && Objects.equals(jogo[1][1], 5) && Objects.equals(jogo[1][2], 6)
+                && Objects.equals(jogo[2][0], 7) && Objects.equals(jogo[2][1], 8) && Objects.equals(jogo[2][2], null)) {
             return true;
         }
-        
+
         return false;
     }
 
