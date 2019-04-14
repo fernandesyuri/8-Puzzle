@@ -80,7 +80,7 @@ public class EstadoJogo implements Comparable<EstadoJogo> {
             for (int j = i + 1; j < puzzle.length; j++) {
                 //System.out.println("investigando "+puzzle[i]+" e "+puzzle[j]);
                 if ((puzzle[i] > puzzle[j]) && (puzzle[i] > 0) && (puzzle[j] > 0)) {
-                    System.out.println("o valor "+puzzle[i]+" é maior que "+puzzle[j]);
+                    // System.out.println("o valor "+puzzle[i]+" é maior que "+puzzle[j]);
                     inv_count++;
                 }
             }
@@ -91,7 +91,7 @@ public class EstadoJogo implements Comparable<EstadoJogo> {
 //        7 6 0
 //        8 2 5
         
-        System.out.println("inversoes "+inv_count);
+        // System.out.println("inversoes "+inv_count);
 
         return inv_count;
     }
@@ -165,6 +165,22 @@ public class EstadoJogo implements Comparable<EstadoJogo> {
         }
         this.valorHeuristica = count;
         return count;
+    }
+
+    public int heuristicaAestrela() {
+
+        String jogoAtual = jogoEmString();
+        String objetivo = "012345678";
+
+        int resultado = 0;
+        for (int i = 0; i < jogoAtual.length(); i++) {
+            for (int j = 0; j < objetivo.length(); j++) {
+                if (jogoAtual.charAt(i) == objetivo.charAt(j)) {
+                    resultado += ((Math.abs(i % 3 - j % 3)) + Math.abs(i / 3 + j / 3));
+                }
+            }
+        }
+        return resultado;
     }
 
     // Converte a matriz do estado do jogo para uma string de linha única
@@ -269,20 +285,21 @@ public class EstadoJogo implements Comparable<EstadoJogo> {
     // Verifica se o estado final é um estado final
     public boolean ehEstadoFinal() {
 
-        // 1 2 3 4 5 6 7 8 0
+        // 0 1 2 3 4 5 6 7 8
         if (Objects.equals(jogo[0][0], 0) && Objects.equals(jogo[0][1], 1) && Objects.equals(jogo[0][2], 2)
                 && Objects.equals(jogo[1][0], 3) && Objects.equals(jogo[1][1], 4) && Objects.equals(jogo[1][2], 5)
                 && Objects.equals(jogo[2][0], 6) && Objects.equals(jogo[2][1], 7) && Objects.equals(jogo[2][2], 8)) {
             return true;
         }
 
-        // 0 1 2 3 4 5 6 7 8
-        if (Objects.equals(jogo[0][0], 1) && Objects.equals(jogo[0][1], 2) && Objects.equals(jogo[0][2], 3)
-                && Objects.equals(jogo[1][0], 4) && Objects.equals(jogo[1][1], 5) && Objects.equals(jogo[1][2], 6)
-                && Objects.equals(jogo[2][0], 7) && Objects.equals(jogo[2][1], 8) && Objects.equals(jogo[2][2], 0)) {
-            return true;
-        }
-
+        // 1 2 3 4 5 6 7 8 0
+        /*
+         if (Objects.equals(jogo[0][0], 1) && Objects.equals(jogo[0][1], 2) && Objects.equals(jogo[0][2], 3)
+         && Objects.equals(jogo[1][0], 4) && Objects.equals(jogo[1][1], 5) && Objects.equals(jogo[1][2], 6)
+         && Objects.equals(jogo[2][0], 7) && Objects.equals(jogo[2][1], 8) && Objects.equals(jogo[2][2], 0)) {
+         return true;
+         }
+         */
         return false;
     }
 
@@ -312,6 +329,10 @@ public class EstadoJogo implements Comparable<EstadoJogo> {
 
     public ArrayList<EstadoJogo> getFilhos() {
         return filhos;
+    }
+
+    public EstadoJogo getPai() {
+        return pai;
     }
 
     public void imprimeEstado() {
@@ -356,10 +377,10 @@ public class EstadoJogo implements Comparable<EstadoJogo> {
             }
             if (Objects.equals(t.getValorTotal(), valorTotal)) {
                 if (t.getNivel() < nivel) {
-                    return -1;
+                    return 1;
                 }
                 if (t.getNivel() > nivel) {
-                    return 1;
+                    return -1;
                 }
             }
             return 0;

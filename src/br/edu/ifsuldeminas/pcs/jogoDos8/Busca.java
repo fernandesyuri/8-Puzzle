@@ -46,7 +46,7 @@ public class Busca {
             estadoAtual.gerarFilhos(estadosJaVisitados);
 
             for (EstadoJogo filho : estadoAtual.getFilhos()) {
-                filho.setValorTotal(estadoAtual.getValorTotal() + filho.calcularHeuristicaManhattan());
+                filho.setValorTotal(estadoAtual.getValorTotal() + filho.heuristicaAestrela());
                 filaDeEstados.add(filho);
             }
 
@@ -69,17 +69,16 @@ public class Busca {
 
     public static void main(String[] args) {
 
-        // 431760825
         Integer[][] jogoInicial = new Integer[3][3];
-        jogoInicial[0][0] = null;
+        jogoInicial[0][0] = 7;
         jogoInicial[0][1] = 2;
-        jogoInicial[0][2] = 3;
-        jogoInicial[1][0] = 1;
-        jogoInicial[1][1] = 4;
-        jogoInicial[1][2] = 5;
+        jogoInicial[0][2] = 4;
+        jogoInicial[1][0] = 5;
+        jogoInicial[1][1] = 0;
+        jogoInicial[1][2] = 6;
         jogoInicial[2][0] = 8;
-        jogoInicial[2][1] = 7;
-        jogoInicial[2][2] = 6;
+        jogoInicial[2][1] = 3;
+        jogoInicial[2][2] = 1;
 
         EstadoJogo raiz = new EstadoJogo(jogoInicial);
         //raiz.gerarEstadoInicial();
