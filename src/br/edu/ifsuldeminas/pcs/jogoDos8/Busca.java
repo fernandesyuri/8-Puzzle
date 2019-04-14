@@ -10,6 +10,7 @@ public class Busca {
     ArrayList<EstadoJogo> nosParaExpansao;
     ArrayList<EstadoJogo> nosJaExpandidos;
 
+    /*
     public EstadoJogo buscaGulosa(EstadoJogo estado, EstadoJogo objetivo) {
         this.nosJaExpandidos = new ArrayList<>();
         this.nosParaExpansao = new ArrayList<>();
@@ -27,6 +28,42 @@ public class Busca {
                 Collections.sort(this.nosParaExpansao);
                 nosJaExpandidos.add(estadoAtual);
             }
+        }
+    }
+    */
+    
+    public EstadoJogo buscaGulosa(EstadoJogo estadoInicial) {
+
+        HashSet<String> estadosJaVisitados = new HashSet<>();
+        int qtdEstadosVisitados = 0;
+
+        PriorityQueue<EstadoJogo> filaDeEstados = new PriorityQueue<>(); // Fila de estados a serem expandidos, por ordem de prioridade
+
+        EstadoJogo estadoAtual = estadoInicial;
+
+        while (estadoAtual != null && !estadoAtual.ehEstadoFinal()) {
+
+            estadosJaVisitados.add(estadoAtual.jogoEmString());
+            estadoAtual.gerarFilhos(estadosJaVisitados);
+
+            for (EstadoJogo filho : estadoAtual.getFilhos()) {
+                filaDeEstados.add(filho);
+            }
+
+            estadoAtual = filaDeEstados.poll();
+            qtdEstadosVisitados += 1;
+        }
+
+        if (estadoAtual == null) {
+            System.out.println("Impossível encontrar uma solução.");
+            return null;
+
+        } else {
+            System.out.println("Solução por busca gulosa encontrada -> " + estadoAtual.jogoEmString());
+            System.out.println("Quantidade de jogadas necessárias da raiz até a solução -> " + estadoAtual.getNivel());
+            System.out.println("Quantidade de nós visitados -> " + qtdEstadosVisitados);
+            System.out.println("");
+            return estadoAtual;
         }
     }
 
@@ -86,6 +123,7 @@ public class Busca {
         System.out.println("Estado inicial -> " + raiz.jogoEmString());
 
         Busca busca = new Busca();
-        EstadoJogo solucao = busca.Aestrela(raiz);
+        busca.buscaGulosa(raiz);
+        busca.Aestrela(raiz);
     }
 }

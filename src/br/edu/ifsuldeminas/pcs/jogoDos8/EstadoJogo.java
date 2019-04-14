@@ -339,7 +339,7 @@ public class EstadoJogo implements Comparable<EstadoJogo> {
             if (t.getValorHeuristica() > getValorHeuristica()) {
                 return -1;
             }
-            if (t.getValorHeuristica() == getValorHeuristica()) {
+            if (Objects.equals(t.getValorHeuristica(), getValorHeuristica())) {
                 if (t.getNivel() < getNivel()) {
                     return -1;
                 }
@@ -403,7 +403,8 @@ public class EstadoJogo implements Comparable<EstadoJogo> {
         //e.imprimeEstado();
 
         Busca busca = new Busca();
-        EstadoJogo solucao = busca.buscaGulosa(e, objetivo);
+        //EstadoJogo solucao = busca.buscaGulosa(e, objetivo);
+        EstadoJogo solucao = busca.buscaGulosa(e);
 
         Stack<EstadoJogo> pilha = new Stack<>();
         do {
