@@ -46,7 +46,7 @@ public class Busca {
             estadoAtual.gerarFilhos(estadosJaVisitados);
 
             for (EstadoJogo filho : estadoAtual.getFilhos()) {
-                filho.setValorTotal(estadoAtual.getValorTotal() + filho.heuristicaAestrela());
+                filho.setValorTotal(estadoAtual.getValorTotal() + filho.calcularHeuristicaManhattan());
                 filaDeEstados.add(filho);
             }
 

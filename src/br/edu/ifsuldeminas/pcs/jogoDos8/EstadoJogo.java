@@ -65,17 +65,17 @@ public class EstadoJogo implements Comparable<EstadoJogo> {
         }
         return clone;
     }
-    
+
     static int getQuantidadeInversao(Integer[][] arr) {
         int inv_count = 0, cont = 0;
         Integer puzzle[] = new Integer[9];
-        
+
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 puzzle[cont++] = arr[i][j];
             }
         }
-        
+
         for (int i = 0; i < puzzle.length; i++) {
             for (int j = i + 1; j < puzzle.length; j++) {
                 //System.out.println("investigando "+puzzle[i]+" e "+puzzle[j]);
@@ -85,14 +85,11 @@ public class EstadoJogo implements Comparable<EstadoJogo> {
                 }
             }
         }
-        
-        
+
 //        4 3 1
 //        7 6 0
 //        8 2 5
-        
         // System.out.println("inversoes "+inv_count);
-
         return inv_count;
     }
 
@@ -131,56 +128,41 @@ public class EstadoJogo implements Comparable<EstadoJogo> {
         int count = 0;
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                if (0 != this.jogo[i][j]) {
-                    switch (this.jogo[i][j]) {
-                        case 1:
-                            count += Math.abs(i - 0) + Math.abs(j - 1);
-                            break;
-                        case 2:
-                            count += Math.abs(i - 0) + Math.abs(j - 2);
-                            break;
-                        case 3:
-                            count += Math.abs(i - 1) + Math.abs(j - 0);
-                            break;
-                        case 4:
-                            count += Math.abs(i - 1) + Math.abs(j - 1);
-                            break;
-                        case 5:
-                            count += Math.abs(i - 1) + Math.abs(j - 2);
-                            break;
-                        case 6:
-                            count += Math.abs(i - 2) + Math.abs(j - 0);
-                            break;
-                        case 7:
-                            count += Math.abs(i - 2) + Math.abs(j - 1);
-                            break;
-                        case 8:
-                            count += Math.abs(i - 2) + Math.abs(j - 2);
-                            break;
-                        default:
-                            break;
-                    }
+                switch (this.jogo[i][j]) {
+                    case 0:
+                        count += Math.abs(i - 0) + Math.abs(j - 0);
+                        break;
+                    case 1:
+                        count += Math.abs(i - 0) + Math.abs(j - 1);
+                        break;
+                    case 2:
+                        count += Math.abs(i - 0) + Math.abs(j - 2);
+                        break;
+                    case 3:
+                        count += Math.abs(i - 1) + Math.abs(j - 0);
+                        break;
+                    case 4:
+                        count += Math.abs(i - 1) + Math.abs(j - 1);
+                        break;
+                    case 5:
+                        count += Math.abs(i - 1) + Math.abs(j - 2);
+                        break;
+                    case 6:
+                        count += Math.abs(i - 2) + Math.abs(j - 0);
+                        break;
+                    case 7:
+                        count += Math.abs(i - 2) + Math.abs(j - 1);
+                        break;
+                    case 8:
+                        count += Math.abs(i - 2) + Math.abs(j - 2);
+                        break;
+                    default:
+                        break;
                 }
             }
         }
         this.valorHeuristica = count;
         return count;
-    }
-
-    public int heuristicaAestrela() {
-
-        String jogoAtual = jogoEmString();
-        String objetivo = "012345678";
-
-        int resultado = 0;
-        for (int i = 0; i < jogoAtual.length(); i++) {
-            for (int j = 0; j < objetivo.length(); j++) {
-                if (jogoAtual.charAt(i) == objetivo.charAt(j)) {
-                    resultado += ((Math.abs(i % 3 - j % 3)) + Math.abs(i / 3 + j / 3));
-                }
-            }
-        }
-        return resultado;
     }
 
     // Converte a matriz do estado do jogo para uma string de linha única
