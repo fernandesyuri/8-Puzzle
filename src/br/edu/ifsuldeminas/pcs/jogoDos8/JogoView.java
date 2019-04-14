@@ -20,7 +20,7 @@ public class JogoView extends JFrame {
     // Cores sobre os botões que representam as casas do tabuleiro.
     private static final Color COR_FUNDO_BOTAO = new Color(66, 134, 244);
     private static final Color COR_FUNDO_BOTAO_PRESSIONADO = Color.LIGHT_GRAY;
-    private static final Color COR_NUMERO_BOTAO = /*Color.WHITE*/Color.BLACK;
+    private static final Color COR_NUMERO_BOTAO = /*Color.WHITE*/ Color.BLACK;
     private static final Font FONTE_BOTAO = new Font("Tahoma", Font.PLAIN, 60);
 
     private EstadoJogo estadoAtual;
@@ -50,19 +50,21 @@ public class JogoView extends JFrame {
         estadoJogo.gerarEstadoInicial();
 
         JogoView jogoView = new JogoView(estadoJogo);
-        
+
         Busca busca = new Busca();
-        jogoView.setQtdJogadasIA(busca.Aestrela(estadoJogo).getNivel());
-        
+        ArrayList<EstadoJogo> caminhoAestrela = busca.Aestrela(estadoJogo);
+
+        jogoView.setQtdJogadasIA(caminhoAestrela.get(caminhoAestrela.size() - 1).getNivel());
+
         estadoJogo.resetarEstadosJaGerados();
     }
 
     // Inicializa as configurações iniciais da janela gráfica do jogo.
     private void inicializarJanela() {
-        
+
         setLayout(new FlowLayout());
         setSize(500, 500);
-        
+
         setLayout(new GridLayout(3, 3));
         setTitle("8-Puzzle");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -98,7 +100,7 @@ public class JogoView extends JFrame {
                 add(casas[i][j]); // Adiciona casa na janela gráfica.
             }
         }
-        
+
         estadoAtual = estado;
 
         // Atualiza a view
@@ -115,7 +117,7 @@ public class JogoView extends JFrame {
                 primeiroBotaoPressionado.setBackground(COR_FUNDO_BOTAO_PRESSIONADO);
                 //System.out.println("Primeiro botão pressionado: " + casa.getText());
 
-            } else if(!primeiroBotaoPressionado.getText().equals(casa.getText())) {
+            } else if (!primeiroBotaoPressionado.getText().equals(casa.getText())) {
 
                 // Procurando a posição das casas na matriz
                 int i1 = -1, j1 = -1, i2 = -1, j2 = -1;
@@ -165,15 +167,15 @@ public class JogoView extends JFrame {
                         EstadoJogo novoEstado = new EstadoJogo(estadoPretendido, estadoAtual);
                         estadoAtual = novoEstado;
                         reposicionarCasas(estadoAtual);
-                        
+
                         contadorJogadas++;
-                        
+
                         // Verifica se atingiu um estado final
-                        if(estadoAtual.ehEstadoFinal()) {
-                            
+                        if (estadoAtual.ehEstadoFinal()) {
+
                             JOptionPane.showMessageDialog(this, "Fim de jogo! Total de jogadas: " + contadorJogadas + "\nA IA teria finalizado o mesmo jogo com A* em " + qtdJogadasIA + " jogadas.");
                         }
-                        
+
                         break;
                     } else {
                     }

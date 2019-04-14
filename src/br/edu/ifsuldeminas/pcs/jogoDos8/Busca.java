@@ -3,13 +3,14 @@ package br.edu.ifsuldeminas.pcs.jogoDos8;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.PriorityQueue;
+import java.util.Stack;
 
 public class Busca {
 
     ArrayList<EstadoJogo> nosParaExpansao;
     ArrayList<EstadoJogo> nosJaExpandidos;
 
-    public EstadoJogo buscaGulosa(EstadoJogo estadoInicial) {
+    public ArrayList<EstadoJogo> buscaGulosa(EstadoJogo estadoInicial) {
 
         HashSet<String> estadosJaVisitados = new HashSet<>();
         int qtdEstadosVisitados = 0;
@@ -40,11 +41,12 @@ public class Busca {
             System.out.println("Quantidade de jogadas necessárias da raiz até a solução -> " + estadoAtual.getNivel());
             System.out.println("Quantidade de nós visitados -> " + qtdEstadosVisitados);
             System.out.println("");
-            return estadoAtual;
+
+            return obterCaminho(estadoAtual);
         }
     }
 
-    public EstadoJogo Aestrela(EstadoJogo estadoInicial) {
+    public ArrayList<EstadoJogo> Aestrela(EstadoJogo estadoInicial) {
 
         HashSet<String> estadosJaVisitados = new HashSet<>();
         int qtdEstadosVisitados = 0;
@@ -77,8 +79,23 @@ public class Busca {
             System.out.println("Quantidade de jogadas necessárias da raiz até a solução -> " + estadoAtual.getNivel());
             System.out.println("Quantidade de nós visitados -> " + qtdEstadosVisitados);
             System.out.println("Custo total da solução -> " + estadoAtual.getValorTotal());
-            return estadoAtual;
+            
+            return obterCaminho(estadoAtual);
         }
+    }
+
+    private ArrayList<EstadoJogo> obterCaminho(EstadoJogo estado) {
+
+        Stack<EstadoJogo> pilha = new Stack<>();
+        while (estado != null) {
+            pilha.push(estado);
+            estado = estado.getPai();
+        }
+        ArrayList<EstadoJogo> caminhoPercorrido = new ArrayList<>();
+        while (!pilha.empty()) {
+            caminhoPercorrido.add(pilha.pop());
+        }
+        return caminhoPercorrido;
     }
 
     public static void main(String[] args) {

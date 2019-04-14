@@ -404,20 +404,15 @@ public class EstadoJogo implements Comparable<EstadoJogo> {
 
         Busca busca = new Busca();
         //EstadoJogo solucao = busca.buscaGulosa(e, objetivo);
-        EstadoJogo solucao = busca.buscaGulosa(e);
-
-        Stack<EstadoJogo> pilha = new Stack<>();
-        do {
-            pilha.push(solucao);
-            solucao = solucao.pai;
-        } while (solucao != null);
+        ArrayList<EstadoJogo> solucao = busca.buscaGulosa(e);
 
         System.out.println("Caminho para chegar no resultado:");
-
-        while (!(pilha.isEmpty())) {
+        
+        for (EstadoJogo estado : solucao) {
             System.out.println("Estado: ");
-            pilha.pop().imprimeEstado();
+            estado.imprimeEstado();
         }
+
         System.out.println("Encontrei o estado final");
     }
 }
