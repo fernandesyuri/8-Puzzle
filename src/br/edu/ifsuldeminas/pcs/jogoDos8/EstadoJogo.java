@@ -27,7 +27,7 @@ public class EstadoJogo implements Comparable<EstadoJogo> {
         this.filhos = new ArrayList<>();
     }
 
-    // Construtor passando o jogo inicial (utilizado para fim de teste)
+    // Construtor passando o jogo inicial (utilizado na entrada de dados manual)
     public EstadoJogo(Integer[][] jogo) {
         this.pai = null;
         this.jogo = jogo;
