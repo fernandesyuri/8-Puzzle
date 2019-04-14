@@ -11,15 +11,40 @@ public class EstadoJogo implements Comparable<EstadoJogo> {
     public EstadoJogo pai;
     private Integer jogo[][];
     private Integer valorHeuristica;
+    private Integer valorTotal; // Utilizado para o A*
     private Integer nivel;
     private HashSet<String> estadosJaGerados;
     private ArrayList<EstadoJogo> filhos;
 
+    // Construtor sem parâmetros
     public EstadoJogo() {
         this.pai = null;
         this.jogo = new Integer[3][3];
         this.valorHeuristica = null;
+        this.valorTotal = null;
         this.nivel = 0;
+        this.estadosJaGerados = new HashSet<>();
+        this.filhos = new ArrayList<>();
+    }
+    
+    // Construtor passando o jogo inicial (utilizado para fim de teste)
+    public EstadoJogo(Integer[][] jogo) {
+        this.pai = null;
+        this.jogo = jogo;
+        this.valorHeuristica = null;
+        this.valorTotal = null;
+        this.nivel = 0;
+        this.estadosJaGerados = new HashSet<>();
+        this.filhos = new ArrayList<>();
+    }
+    
+    // Construtor passando o jogo inicial e o pai (utilizado na jogada manual)
+    public EstadoJogo(Integer[][] jogo, EstadoJogo pai) {
+        this.pai = pai;
+        this.jogo = jogo;
+        this.valorHeuristica = null;
+        this.valorTotal = null;
+        this.nivel = pai.getNivel() + 1;
         this.estadosJaGerados = new HashSet<>();
         this.filhos = new ArrayList<>();
     }
@@ -29,14 +54,6 @@ public class EstadoJogo implements Comparable<EstadoJogo> {
         this.filhos.add(clonado);
         //clonado.imprimeEstado();
         //clonado.pai.imprimeEstado();
-    }
-
-    public EstadoJogo(Integer[][] jogo, EstadoJogo pai) {
-        this.pai = pai;
-        this.jogo = jogo;
-        this.valorHeuristica = null;
-        this.nivel = pai.getNivel() + 1;
-        this.estadosJaGerados = new HashSet<>();
     }
 
     public EstadoJogo clonar() {
@@ -80,7 +97,7 @@ public class EstadoJogo implements Comparable<EstadoJogo> {
         return (invCount % 2 == 0);
     }
 
-    private void gerarEstadoInicial() {
+    public void gerarEstadoInicial() {
         HashSet<Integer> numeros = new HashSet<>();
         Random gerador = new Random();
 
@@ -102,7 +119,7 @@ public class EstadoJogo implements Comparable<EstadoJogo> {
         this.estadosJaGerados.add(this.jogoEmString());
     }
 
-    public void calcularHeuristicaManhattan() {
+    public int calcularHeuristicaManhattan() {
         int count = 0;
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
@@ -139,8 +156,10 @@ public class EstadoJogo implements Comparable<EstadoJogo> {
             }
         }
         this.valorHeuristica = count;
+        return count;
     }
 
+    // Converte a matriz do estado do jogo para uma string de linha única
     public String jogoEmString() {
         String jogoString = new String();
 
@@ -154,6 +173,7 @@ public class EstadoJogo implements Comparable<EstadoJogo> {
         return jogoString;
     }
 
+    // Gera todos os filhos possíveis, sem repetição
     public ArrayList<EstadoJogo> gerarFilhos() {
         int i0 = -1, j0 = -1;
         EstadoJogo clone = this.clonar();
@@ -228,10 +248,17 @@ public class EstadoJogo implements Comparable<EstadoJogo> {
         return this.filhos;
     }
 
+    public ArrayList<EstadoJogo> gerarFilhos(HashSet<String> estadosJaGerados) {
+        this.estadosJaGerados = estadosJaGerados;
+        return gerarFilhos();
+    }
+
+    // Utilizado na jogada manual
     public void resetarEstadosJaGerados() {
         estadosJaGerados = new HashSet<>();
     }
 
+    // Verifica se o estado final é um estado final
     public boolean ehEstadoFinal() {
 
         // 1 2 3 4 5 6 7 8 0
@@ -267,6 +294,18 @@ public class EstadoJogo implements Comparable<EstadoJogo> {
         return nivel;
     }
 
+    public Integer getValorTotal() {
+        return valorTotal;
+    }
+
+    public void setValorTotal(Integer valorTotal) {
+        this.valorTotal = valorTotal;
+    }
+
+    public ArrayList<EstadoJogo> getFilhos() {
+        return filhos;
+    }
+
     public void imprimeEstado() {
         for (int i = 0; i < jogoEmString().length(); i++) {
             if (i == 3 || i == 6) {
@@ -280,21 +319,43 @@ public class EstadoJogo implements Comparable<EstadoJogo> {
 
     @Override
     public int compareTo(EstadoJogo t) {
-        if (t.getValorHeuristica() < getValorHeuristica()) {
-            return 1;
-        }
-        if (t.getValorHeuristica() > getValorHeuristica()) {
-            return -1;
-        }
-        if (t.getValorHeuristica() == getValorHeuristica()) {
-            if (t.getNivel() < getNivel()) {
-                return -1;
-            }
-            if (t.getNivel() > getNivel()) {
+
+        if (valorTotal == null) {
+
+            if (t.getValorHeuristica() < getValorHeuristica()) {
                 return 1;
             }
+            if (t.getValorHeuristica() > getValorHeuristica()) {
+                return -1;
+            }
+            if (t.getValorHeuristica() == getValorHeuristica()) {
+                if (t.getNivel() < getNivel()) {
+                    return -1;
+                }
+                if (t.getNivel() > getNivel()) {
+                    return 1;
+                }
+            }
+            return 0;
+
+        } else {
+
+            if (t.getValorTotal() < valorTotal) {
+                return 1;
+            }
+            if (t.getValorTotal() > valorTotal) {
+                return -1;
+            }
+            if (Objects.equals(t.getValorTotal(), valorTotal)) {
+                if (t.getNivel() < nivel) {
+                    return -1;
+                }
+                if (t.getNivel() > nivel) {
+                    return 1;
+                }
+            }
+            return 0;
         }
-        return 0;
     }
 
     public static void main(String args[]) {

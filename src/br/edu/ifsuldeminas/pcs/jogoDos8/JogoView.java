@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.Objects;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -26,6 +27,7 @@ public class JogoView extends JFrame {
     private JButton casas[][]; // Representa as casas no tabuleiro.
     private JButton primeiroBotaoPressionado;
     private int contadorJogadas;
+    private int qtdJogadasIA;
 
     /**
      * Permite criar uma janela gráfica que representa o tabuleiro do jogo da
@@ -37,6 +39,7 @@ public class JogoView extends JFrame {
         this.estadoAtual = estadoInicial;
         this.primeiroBotaoPressionado = null;
         this.contadorJogadas = 0;
+        this.qtdJogadasIA = 0;
         inicializarJanela();
         reposicionarCasas(estadoInicial);
     }
@@ -47,6 +50,11 @@ public class JogoView extends JFrame {
         estadoJogo.gerarEstadoInicial();
 
         JogoView jogoView = new JogoView(estadoJogo);
+        
+        Busca busca = new Busca();
+        jogoView.setQtdJogadasIA(busca.Aestrela(estadoJogo).getNivel());
+        
+        estadoJogo.resetarEstadosJaGerados();
     }
 
     // Inicializa as configurações iniciais da janela gráfica do jogo.
@@ -81,7 +89,7 @@ public class JogoView extends JFrame {
         // Posiciona as novas casas no tabuleiro
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                casas[i][j] = new JButton(estado.getJogo()[i][j] != null ? estado.getJogo()[i][j].toString() : "");
+                casas[i][j] = new JButton(estado.getJogo()[i][j] != 0 ? estado.getJogo()[i][j].toString() : "");
                 casas[i][j].setBackground(COR_FUNDO_BOTAO);
                 casas[i][j].setForeground(COR_NUMERO_BOTAO);
                 casas[i][j].setFont(FONTE_BOTAO);
@@ -133,11 +141,11 @@ public class JogoView extends JFrame {
                 for (int i = 0; i < 3; i++) {
                     for (int j = 0; j < 3; j++) {
                         if (i == i1 && j == j1) {
-                            estadoPretendido[i][j] = casas[i2][j2].getText().equals("") ? null : Integer.valueOf(casas[i2][j2].getText());
+                            estadoPretendido[i][j] = casas[i2][j2].getText().equals("") ? 0 : Integer.valueOf(casas[i2][j2].getText());
                         } else if (i == i2 && j == j2) {
-                            estadoPretendido[i][j] = casas[i1][j1].getText().equals("") ? null : Integer.valueOf(casas[i1][j1].getText());
+                            estadoPretendido[i][j] = casas[i1][j1].getText().equals("") ? 0 : Integer.valueOf(casas[i1][j1].getText());
                         } else {
-                            estadoPretendido[i][j] = casas[i][j].getText().equals("") ? null : Integer.valueOf(casas[i][j].getText());
+                            estadoPretendido[i][j] = casas[i][j].getText().equals("") ? 0 : Integer.valueOf(casas[i][j].getText());
                         }
                     }
                 }
@@ -146,7 +154,7 @@ public class JogoView extends JFrame {
                     boolean ehFilho = true;
                     for (int i = 0; i < 3; i++) {
                         for (int j = 0; j < 3; j++) {
-                            if (filho.getJogo()[i][j] != estadoPretendido[i][j]) {
+                            if (!Objects.equals(filho.getJogo()[i][j], estadoPretendido[i][j])) {
                                 ehFilho = false;
                                 i = 3;
                                 j = 3;
@@ -162,7 +170,8 @@ public class JogoView extends JFrame {
                         
                         // Verifica se atingiu um estado final
                         if(estadoAtual.ehEstadoFinal()) {
-                            JOptionPane.showMessageDialog(this, "Fim de jogo! Total de jogadas: " + contadorJogadas);
+                            
+                            JOptionPane.showMessageDialog(this, "Fim de jogo! Total de jogadas: " + contadorJogadas + "\nA IA teria finalizado o mesmo jogo com A* em " + qtdJogadasIA + " jogadas.");
                         }
                         
                         break;
@@ -182,5 +191,13 @@ public class JogoView extends JFrame {
                 primeiroBotaoPressionado = null;
             }
         });
+    }
+
+    public int getQtdJogadasIA() {
+        return qtdJogadasIA;
+    }
+
+    public void setQtdJogadasIA(int qtdJogadasIA) {
+        this.qtdJogadasIA = qtdJogadasIA;
     }
 }
