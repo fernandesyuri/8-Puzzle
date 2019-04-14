@@ -26,7 +26,7 @@ public class EstadoJogo implements Comparable<EstadoJogo> {
         this.estadosJaGerados = new HashSet<>();
         this.filhos = new ArrayList<>();
     }
-    
+
     // Construtor passando o jogo inicial (utilizado para fim de teste)
     public EstadoJogo(Integer[][] jogo) {
         this.pai = null;
@@ -37,7 +37,7 @@ public class EstadoJogo implements Comparable<EstadoJogo> {
         this.estadosJaGerados = new HashSet<>();
         this.filhos = new ArrayList<>();
     }
-    
+
     // Construtor passando o jogo inicial e o pai (utilizado na jogada manual)
     public EstadoJogo(Integer[][] jogo, EstadoJogo pai) {
         this.pai = pai;
@@ -66,35 +66,32 @@ public class EstadoJogo implements Comparable<EstadoJogo> {
         return clone;
     }
 
-    static int getQuantidadeInversao(Integer[][] arr) {
-        int inv_count = 0;
-        
+    private boolean temSolucao(Integer[][] jogo) {
+
+        ArrayList<Integer> jogoEmLista = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++)  {
-                for (int k = i; k < 3; k++) {
-                    for (int l = j; l < 3; l++) {
-                        //System.out.println("posicao "+i+","+j+" comparando com "+k+","+l);
-                        if (arr[i][j] > 0 && arr[k][l] > 0 && arr[i][j] > arr[k][l]) {
-                            inv_count++;
-                        }
-                    }
+            for (int j = 0; j < 3; j++) {
+                if (jogo[i][j] != null && jogo[i][j] != 0) {
+                    jogoEmLista.add(jogo[i][j]);
                 }
-                
             }
         }
 
-        //System.out.println("quantidade inv " + inv_count);
+        int inversoes = 0;
 
-        return inv_count;
-    }
+        for (int i = 0; i < jogoEmLista.size(); i++) {
+            for (int j = i + 1; j < jogoEmLista.size(); j++) {
+                if (jogoEmLista.get(j) > jogoEmLista.get(i)) {
+                    inversoes++;
+                }
+            }
+        }
 
-    // Retorna true se o quebra cabeca tiver solucao
-    private boolean temSolucao(Integer[][] puzzle) {
-        // conta quantas inversoes tem no quebra cabeca
-        int invCount = getQuantidadeInversao(puzzle);
-
-        // retorna true se a quantidad de inversao for par, ou seja, é possível resolver
-        return (invCount % 2 == 0);
+        if (inversoes % 2 == 1) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     public void gerarEstadoInicial() {
@@ -360,11 +357,10 @@ public class EstadoJogo implements Comparable<EstadoJogo> {
 
     public static void main(String args[]) {
         EstadoJogo e = new EstadoJogo();
-        
+
         //e.gerarEstadoInicial();
         //System.out.println("estado gerado ");
         //e.imprimeEstado();
-        
         e.jogo[0][0] = 4;
         e.jogo[0][1] = 3;
         e.jogo[0][2] = 1;
@@ -374,11 +370,11 @@ public class EstadoJogo implements Comparable<EstadoJogo> {
         e.jogo[2][0] = 8;
         e.jogo[2][1] = 2;
         e.jogo[2][2] = 5;
-        
-        if(e.temSolucao(e.getJogo())) {
+
+        if (e.temSolucao(e.getJogo())) {
             System.out.println("tem solucao");
         }
-        
+
         JogoView view = new JogoView(e);
 
         EstadoJogo objetivo = new EstadoJogo();
