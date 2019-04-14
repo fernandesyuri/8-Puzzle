@@ -195,24 +195,12 @@ public class EstadoJogo implements Comparable<EstadoJogo> {
                 break;
             }
         }
-        //troca 0 com o valor de cima
-        if (i0 - 1 >= 0) {
-            int aux = clone.jogo[i0 - 1][j0];
-            clone.jogo[i0 - 1][j0] = clone.jogo[i0][j0];
-            clone.jogo[i0][j0] = aux;
-            String jogoString = clone.jogoEmString();
-            if (this.estadosJaGerados.add(jogoString)) {
-                clone.pai = this;
-                clone.calcularHeuristicaManhattan();
-                clone.nivel = this.nivel + 1;
-                addFilho(clone);
-            }
-        }
-        //troca 0 com o valor de baixo
-        if (i0 + 1 < 3) {
+        
+        //troca 0 com o valor a esquerda
+        if (j0 - 1 >= 0) {
             clone = this.clonar();
-            int aux = clone.jogo[i0 + 1][j0];
-            clone.jogo[i0 + 1][j0] = clone.jogo[i0][j0];
+            int aux = clone.jogo[i0][j0 - 1];
+            clone.jogo[i0][j0 - 1] = clone.jogo[i0][j0];
             clone.jogo[i0][j0] = aux;
             String jogoString = clone.jogoEmString();
             if (this.estadosJaGerados.add(jogoString)) {
@@ -236,11 +224,24 @@ public class EstadoJogo implements Comparable<EstadoJogo> {
                 addFilho(clone);
             }
         }
-        //troca 0 com o valor a esquerda
-        if (j0 - 1 >= 0) {
+        //troca 0 com o valor de cima
+        if (i0 - 1 >= 0) {
+            int aux = clone.jogo[i0 - 1][j0];
+            clone.jogo[i0 - 1][j0] = clone.jogo[i0][j0];
+            clone.jogo[i0][j0] = aux;
+            String jogoString = clone.jogoEmString();
+            if (this.estadosJaGerados.add(jogoString)) {
+                clone.pai = this;
+                clone.calcularHeuristicaManhattan();
+                clone.nivel = this.nivel + 1;
+                addFilho(clone);
+            }
+        }
+        //troca 0 com o valor de baixo
+        if (i0 + 1 < 3) {
             clone = this.clonar();
-            int aux = clone.jogo[i0][j0 - 1];
-            clone.jogo[i0][j0 - 1] = clone.jogo[i0][j0];
+            int aux = clone.jogo[i0 + 1][j0];
+            clone.jogo[i0 + 1][j0] = clone.jogo[i0][j0];
             clone.jogo[i0][j0] = aux;
             String jogoString = clone.jogoEmString();
             if (this.estadosJaGerados.add(jogoString)) {
@@ -367,52 +368,5 @@ public class EstadoJogo implements Comparable<EstadoJogo> {
             }
             return 0;
         }
-    }
-
-    public static void main(String args[]) {
-        EstadoJogo e = new EstadoJogo();
-
-        //e.gerarEstadoInicial();
-        //System.out.println("estado gerado ");
-        //e.imprimeEstado();
-        e.jogo[0][0] = 8;
-        e.jogo[0][1] = 1;
-        e.jogo[0][2] = 2;
-        e.jogo[1][0] = 0;
-        e.jogo[1][1] = 4;
-        e.jogo[1][2] = 3;
-        e.jogo[2][0] = 7;
-        e.jogo[2][1] = 6;
-        e.jogo[2][2] = 5;
-
-        if (e.temSolucao(e.getJogo())) {
-            System.out.println("tem solucao");
-        } else {
-            System.out.println("nao tem solucao");
-        }
-
-        JogoView view = new JogoView(e);
-
-        EstadoJogo objetivo = new EstadoJogo();
-        int count = 0;
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                objetivo.jogo[i][j] = count++;
-            }
-        }
-        //e.imprimeEstado();
-
-        Busca busca = new Busca();
-        //EstadoJogo solucao = busca.buscaGulosa(e, objetivo);
-        ArrayList<EstadoJogo> solucao = busca.buscaGulosa(e);
-
-        System.out.println("Caminho para chegar no resultado:");
-        
-        for (EstadoJogo estado : solucao) {
-            System.out.println("Estado: ");
-            estado.imprimeEstado();
-        }
-
-        System.out.println("Encontrei o estado final");
     }
 }

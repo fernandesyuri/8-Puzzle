@@ -1,5 +1,6 @@
 package br.edu.ifsuldeminas.pcs.jogoDos8;
 
+import java.awt.Button;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -22,10 +23,12 @@ public class JogoView extends JFrame {
     private static final Color COR_FUNDO_BOTAO_PRESSIONADO = Color.LIGHT_GRAY;
     private static final Color COR_NUMERO_BOTAO = /*Color.WHITE*/ Color.BLACK;
     private static final Font FONTE_BOTAO = new Font("Tahoma", Font.PLAIN, 60);
-
+    private static final Font FONTE_BOTAODOIS = new Font("Tahoma", Font.PLAIN, 40);
+    private int controle = 0;
     private EstadoJogo estadoAtual;
     private JButton casas[][]; // Representa as casas no tabuleiro.
     private JButton primeiroBotaoPressionado;
+    private JButton avancar, voltar, info, desistir;
     private int contadorJogadas;
     private int qtdJogadasIA;
 
@@ -40,35 +43,20 @@ public class JogoView extends JFrame {
         this.primeiroBotaoPressionado = null;
         this.contadorJogadas = 0;
         this.qtdJogadasIA = 0;
+        this.desistir = new JButton("Desistir");
         inicializarJanela();
         reposicionarCasas(estadoInicial);
     }
-
-    public static void main(String[] args) {
-
-        EstadoJogo estadoJogo = new EstadoJogo();
-        estadoJogo.gerarEstadoInicial();
-
-        JogoView jogoView = new JogoView(estadoJogo);
-
-        Busca busca = new Busca();
-        ArrayList<EstadoJogo> caminhoAestrela = busca.Aestrela(estadoJogo);
-
-        jogoView.setQtdJogadasIA(caminhoAestrela.get(caminhoAestrela.size() - 1).getNivel());
-
-        estadoJogo.resetarEstadosJaGerados();
-    }
-
+    
     // Inicializa as configurações iniciais da janela gráfica do jogo.
     private void inicializarJanela() {
-
         setLayout(new FlowLayout());
         setSize(500, 500);
-
-        setLayout(new GridLayout(3, 3));
+        setLayout(new GridLayout(4, 3));
         setTitle("8-Puzzle");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
+        setLocationRelativeTo(null);
     }
 
     /**
@@ -103,6 +91,9 @@ public class JogoView extends JFrame {
 
         estadoAtual = estado;
 
+        desistir.setFont(FONTE_BOTAODOIS);
+        add(desistir);
+        
         // Atualiza a view
         revalidate();
         repaint();
@@ -172,10 +163,9 @@ public class JogoView extends JFrame {
 
                         // Verifica se atingiu um estado final
                         if (estadoAtual.ehEstadoFinal()) {
-
-                            JOptionPane.showMessageDialog(this, "Fim de jogo! Total de jogadas: " + contadorJogadas + "\nA IA teria finalizado o mesmo jogo com A* em " + qtdJogadasIA + " jogadas.");
+                            JOptionPane.showMessageDialog(this, "Fim de jogo! Total de jogadas: " + contadorJogadas);
+                            controle = 1;
                         }
-
                         break;
                     } else {
                     }
@@ -201,5 +191,9 @@ public class JogoView extends JFrame {
 
     public void setQtdJogadasIA(int qtdJogadasIA) {
         this.qtdJogadasIA = qtdJogadasIA;
+    }
+    
+    public int getControle() {
+        return this.controle;
     }
 }

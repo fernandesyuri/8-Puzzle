@@ -97,27 +97,4 @@ public class Busca {
         }
         return caminhoPercorrido;
     }
-
-    public static void main(String[] args) {
-
-        Integer[][] jogoInicial = new Integer[3][3];
-        jogoInicial[0][0] = 7;
-        jogoInicial[0][1] = 2;
-        jogoInicial[0][2] = 4;
-        jogoInicial[1][0] = 5;
-        jogoInicial[1][1] = 0;
-        jogoInicial[1][2] = 6;
-        jogoInicial[2][0] = 8;
-        jogoInicial[2][1] = 3;
-        jogoInicial[2][2] = 1;
-
-        EstadoJogo raiz = new EstadoJogo(jogoInicial);
-        //raiz.gerarEstadoInicial();
-
-        System.out.println("Estado inicial -> " + raiz.jogoEmString());
-
-        Busca busca = new Busca();
-        busca.buscaGulosa(raiz);
-        busca.Aestrela(raiz);
-    }
 }

@@ -1,13 +1,14 @@
 package br.edu.ifsuldeminas.pcs.jogoDos8;
 
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 public class ViewPrincipal extends javax.swing.JFrame {
-
     private String jogo;
     private Integer[][] jogoManual;
     private EstadoJogo jogoAtual;
     private int tipoBusca, tipoControle;
+    private ArrayList<EstadoJogo> caminho;
     
     public ViewPrincipal() {
         initComponents();
@@ -85,7 +86,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
         jComboSelect.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Busca Gulosa", "A*" }));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jLabel4.setText("Controle IA:");
+        jLabel4.setText("Controle Jogadas IA:");
 
         jComboControl.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Manual", "Automático" }));
 
@@ -267,7 +268,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jBtnExitActionPerformed
 
     private void jBtnGoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnGoActionPerformed
-        JogoView view = new JogoView(jogoAtual);
+        JogoView viewJogador = new JogoView(jogoAtual);
         Busca busca = new Busca();
         
         if(jComboSelect.getSelectedIndex() == 0)
@@ -282,10 +283,14 @@ public class ViewPrincipal extends javax.swing.JFrame {
         
         switch(this.tipoBusca) {
             case 0:
-                busca.buscaGulosa(jogoAtual);
+                caminho = busca.buscaGulosa(jogoAtual);
+                viewJogador.setQtdJogadasIA(caminho.get(caminho.size() - 1).getNivel());
+                jogoAtual.resetarEstadosJaGerados();
                 break;
             case 1:
-                busca.Aestrela(jogoAtual);
+                caminho = busca.Aestrela(jogoAtual);
+                viewJogador.setQtdJogadasIA(caminho.get(caminho.size() - 1).getNivel());
+                jogoAtual.resetarEstadosJaGerados();
                 break;
         }
     }//GEN-LAST:event_jBtnGoActionPerformed
