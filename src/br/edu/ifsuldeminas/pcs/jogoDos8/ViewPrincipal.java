@@ -284,7 +284,6 @@ public class ViewPrincipal extends javax.swing.JFrame {
         switch(this.tipoBusca) {
             case 0:
                 caminho = busca.buscaGulosa(jogoAtual);
-                viewJogador.setQtdJogadasIA(caminho.get(caminho.size() - 1).getNivel());
                 jogoAtual.resetarEstadosJaGerados();
                 break;
             case 1:

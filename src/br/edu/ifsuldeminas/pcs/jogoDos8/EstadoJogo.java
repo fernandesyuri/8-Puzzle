@@ -195,12 +195,24 @@ public class EstadoJogo implements Comparable<EstadoJogo> {
                 break;
             }
         }
-        
-        //troca 0 com o valor a esquerda
-        if (j0 - 1 >= 0) {
+        //troca 0 com o valor de cima
+        if (i0 - 1 >= 0) {
+            int aux = clone.jogo[i0 - 1][j0];
+            clone.jogo[i0 - 1][j0] = clone.jogo[i0][j0];
+            clone.jogo[i0][j0] = aux;
+            String jogoString = clone.jogoEmString();
+            if (this.estadosJaGerados.add(jogoString)) {
+                clone.pai = this;
+                clone.calcularHeuristicaManhattan();
+                clone.nivel = this.nivel + 1;
+                addFilho(clone);
+            }
+        }
+        //troca 0 com o valor de baixo
+        if (i0 + 1 < 3) {
             clone = this.clonar();
-            int aux = clone.jogo[i0][j0 - 1];
-            clone.jogo[i0][j0 - 1] = clone.jogo[i0][j0];
+            int aux = clone.jogo[i0 + 1][j0];
+            clone.jogo[i0 + 1][j0] = clone.jogo[i0][j0];
             clone.jogo[i0][j0] = aux;
             String jogoString = clone.jogoEmString();
             if (this.estadosJaGerados.add(jogoString)) {
@@ -224,24 +236,11 @@ public class EstadoJogo implements Comparable<EstadoJogo> {
                 addFilho(clone);
             }
         }
-        //troca 0 com o valor de cima
-        if (i0 - 1 >= 0) {
-            int aux = clone.jogo[i0 - 1][j0];
-            clone.jogo[i0 - 1][j0] = clone.jogo[i0][j0];
-            clone.jogo[i0][j0] = aux;
-            String jogoString = clone.jogoEmString();
-            if (this.estadosJaGerados.add(jogoString)) {
-                clone.pai = this;
-                clone.calcularHeuristicaManhattan();
-                clone.nivel = this.nivel + 1;
-                addFilho(clone);
-            }
-        }
-        //troca 0 com o valor de baixo
-        if (i0 + 1 < 3) {
+        //troca 0 com o valor a esquerda
+        if (j0 - 1 >= 0) {
             clone = this.clonar();
-            int aux = clone.jogo[i0 + 1][j0];
-            clone.jogo[i0 + 1][j0] = clone.jogo[i0][j0];
+            int aux = clone.jogo[i0][j0 - 1];
+            clone.jogo[i0][j0 - 1] = clone.jogo[i0][j0];
             clone.jogo[i0][j0] = aux;
             String jogoString = clone.jogoEmString();
             if (this.estadosJaGerados.add(jogoString)) {
