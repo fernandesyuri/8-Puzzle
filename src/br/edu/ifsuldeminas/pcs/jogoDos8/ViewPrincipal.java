@@ -4,13 +4,14 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 public class ViewPrincipal extends javax.swing.JFrame {
+
     private String jogo;
     private Integer[][] jogoManual;
     private EstadoJogo jogoAtual;
     private int tipoBusca, tipoControle;
     private ArrayList<EstadoJogo> caminho;
     private String valorManual;
-    
+
     public ViewPrincipal() {
         initComponents();
         setLocationRelativeTo(null);
@@ -219,7 +220,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
         estado.gerarEstadoInicial();
         jogo = new String();
         jogo = estado.jogoEmString();
-        
+
         jBtn00.setText(jogo.substring(0, 1));
         jBtn01.setText(jogo.substring(1, 2));
         jBtn02.setText(jogo.substring(2, 3));
@@ -229,25 +230,25 @@ public class ViewPrincipal extends javax.swing.JFrame {
         jBtn20.setText(jogo.substring(6, 7));
         jBtn21.setText(jogo.substring(7, 8));
         jBtn22.setText(jogo.substring(8, 9));
-        
+
         this.jogoAtual = estado;
         jBtnGo.setEnabled(true);
     }//GEN-LAST:event_jBtnRndActionPerformed
 
     private void jBtnManActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnManActionPerformed
-          
+
         CadastroManual cadastro = new CadastroManual(this);
         cadastro.setVisible(true);
-        
+
     }//GEN-LAST:event_jBtnManActionPerformed
 
-    public void preencheDadosManual () {
+    public void preencheDadosManual() {
         int k = 0;
         jogoManual = new Integer[3][3];
 
-        for(int i = 0; i < 3; i++) {
-            for(int j = 0; j < 3; j++) {
-                jogoManual[i][j] = Integer.parseInt(valorManual.substring(k, k+1));
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                jogoManual[i][j] = Integer.parseInt(valorManual.substring(k, k + 1));
                 k++;
             }
         }
@@ -265,31 +266,33 @@ public class ViewPrincipal extends javax.swing.JFrame {
         EstadoJogo estado = new EstadoJogo(jogoManual);
         this.jogoAtual = estado;
         jBtnGo.setEnabled(true);
-        
+
     }
-    
+
     private void jBtnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnExitActionPerformed
         System.exit(0);
     }//GEN-LAST:event_jBtnExitActionPerformed
 
     private void jBtnGoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnGoActionPerformed
-        
+
         if (jogoAtual.temSolucao(jogoAtual.getJogo())) {
-            
+
             JogoView viewJogador = new JogoView(jogoAtual, true);
             Busca busca = new Busca();
-        
-            if(jComboSelect.getSelectedIndex() == 0)
+
+            if (jComboSelect.getSelectedIndex() == 0) {
                 this.tipoBusca = 0;
-            else
+            } else {
                 this.tipoBusca = 1;
+            }
 
-            if(jComboControl.getSelectedIndex() == 0)
+            if (jComboControl.getSelectedIndex() == 0) {
                 this.tipoControle = 0;
-            else
+            } else {
                 this.tipoControle = 1;
+            }
 
-            switch(this.tipoBusca) {
+            switch (this.tipoBusca) {
                 case 0:
                     caminho = busca.buscaGulosa(jogoAtual);
                     jogoAtual.resetarEstadosJaGerados();
@@ -304,7 +307,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Não existe solução para este estado. Insira outro estado.");
             jBtnGo.setEnabled(false);
         }
-        
+
     }//GEN-LAST:event_jBtnGoActionPerformed
 
     public static void main(String args[]) {

@@ -10,18 +10,20 @@ import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 
 public class CadastroManual extends javax.swing.JFrame {
+
     private ViewPrincipal viewLocal = new ViewPrincipal();
-    
+
     public CadastroManual(ViewPrincipal view) {
         initComponents();
         viewLocal = view;
         setLocationRelativeTo(null);
     }
-    
+
     public CadastroManual() {
         initComponents();
         setLocationRelativeTo(null);
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -82,7 +84,7 @@ public class CadastroManual extends javax.swing.JFrame {
     private void btnInserirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInserirActionPerformed
         // TODO add your handling code here:
         boolean repetido = false;
-        
+
         if (txtValor.getText().length() != 9) {
             JOptionPane.showMessageDialog(null, "Formato incorreto. Insira uma série de 9 caracteres.");
         } else {
@@ -93,16 +95,16 @@ public class CadastroManual extends javax.swing.JFrame {
             if (b) {
                 JOptionPane.showMessageDialog(null, "Insira apenas caracteres númericos.");
             } else {
-                
+
                 for (int i = 0; i < txtValor.getText().length(); i++) {
-                    for (int j = i+1; j < txtValor.getText().length(); j++) {
+                    for (int j = i + 1; j < txtValor.getText().length(); j++) {
                         if (txtValor.getText().charAt(i) == txtValor.getText().charAt(j)) {
                             repetido = true;
                             //System.out.println("repetidos "+txtValor.getText().charAt(i)+" e "+txtValor.getText().charAt(j));
                         }
                     }
                 }
-                
+
                 if (repetido == true) {
                     JOptionPane.showMessageDialog(null, "Não insira numeros repetidos.");
                 } else {
@@ -113,7 +115,7 @@ public class CadastroManual extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_btnInserirActionPerformed
-    
+
     /**
      * @param args the command line arguments
      */
@@ -154,6 +156,5 @@ public class CadastroManual extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JTextField txtValor;
     // End of variables declaration//GEN-END:variables
-
 
 }

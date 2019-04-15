@@ -44,8 +44,8 @@ public class JogoView extends JFrame {
         this.contadorJogadas = 0;
         this.qtdJogadasIA = 0;
         this.flag = flag;
-        
-        if(flag) {
+
+        if (flag) {
             this.botaoUm = new JButton();
             this.botaoDois = new JButton("Desistir");
             this.botaoTres = new JButton();
@@ -54,11 +54,11 @@ public class JogoView extends JFrame {
             this.botaoDois = new JButton("Voltar");
             this.botaoTres = new JButton("INFO");
         }
-        
+
         inicializarJanela();
         reposicionarCasas(estadoInicial);
     }
-    
+
     // Inicializa as configurações iniciais da janela gráfica do jogo.
     private void inicializarJanela() {
         setLayout(new FlowLayout());
@@ -102,12 +102,23 @@ public class JogoView extends JFrame {
 
         estadoAtual = estado;
 
-        if(flag) {
+        if (flag) {
             botaoUm.setEnabled(false);
             botaoTres.setEnabled(false);
             addEvent(botaoDois);
-        } 
-        
+        } else {
+            botaoUm.addActionListener((ActionEvent ae) -> {
+                System.out.println("um apertado");
+            });
+            botaoDois.addActionListener((ActionEvent ae) -> {
+                System.out.println("dois apertado");
+            });
+            botaoTres.addActionListener((ActionEvent ae) -> {
+                System.out.println("tres apertado");
+            });
+            
+        }
+
         botaoUm.setFont(FONTE_BOTAODOIS);
         botaoDois.setFont(FONTE_BOTAODOIS);
         botaoTres.setFont(FONTE_BOTAODOIS);
@@ -115,22 +126,22 @@ public class JogoView extends JFrame {
         add(botaoUm);
         add(botaoDois);
         add(botaoTres);
-        
+
         // Atualiza a view
         revalidate();
         repaint();
     }
 
-    private void addEvent(JButton botao) 
-    {
+    private void addEvent(JButton botao) {
         botao.addActionListener((ActionEvent ae) -> {
             setVisible(false);
             JogoView viewIA = new JogoView(estadoAtual, false);
+            System.out.println("teste");
         });
     }
-    
+
     private void addEvento(JButton casa) {
-        
+
         casa.addActionListener((ActionEvent ae) -> {
 
             if (primeiroBotaoPressionado == null) {
@@ -194,9 +205,11 @@ public class JogoView extends JFrame {
                         // Verifica se atingiu um estado final
                         if (estadoAtual.ehEstadoFinal()) {
                             JOptionPane.showMessageDialog(this, "Fim de jogo! Total de jogadas: " + contadorJogadas);
+
+                            setVisible(false);
+                            JogoView viewIA = new JogoView(estadoAtual, false);
                         }
                         break;
-                    } else {
                     }
                 }
 
