@@ -8,7 +8,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
     private String jogo;
     private Integer[][] jogoManual;
     private EstadoJogo jogoAtual;
-    private int tipoBusca, tipoControle;
+    private int tipoBusca;
     private ArrayList<EstadoJogo> caminho;
     private String valorManual;
 
@@ -220,10 +220,8 @@ public class ViewPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jBtnRndActionPerformed
 
     private void jBtnManActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnManActionPerformed
-
         CadastroManual cadastro = new CadastroManual(this);
         cadastro.setVisible(true);
-
     }//GEN-LAST:event_jBtnManActionPerformed
 
     public void preencheDadosManual() {

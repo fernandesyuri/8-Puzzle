@@ -12,24 +12,24 @@ public class Busca {
 
     public ArrayList<EstadoJogo> buscaGulosa(EstadoJogo estadoInicial) {
 
-        HashSet<String> estadosJaVisitados = new HashSet<>();
+        HashSet<String> estadosJaVisitados = new HashSet<>(); // HashSet para impedir a criação de filhos iguais
         int qtdEstadosVisitados = 0;
 
         PriorityQueue<EstadoJogo> filaDeEstados = new PriorityQueue<>(); // Fila de estados a serem expandidos, por ordem de prioridade
 
         EstadoJogo estadoAtual = estadoInicial;
 
-        while (estadoAtual != null && !estadoAtual.ehEstadoFinal()) {
+        while (estadoAtual != null && !estadoAtual.ehEstadoFinal()) { // Faz enquanto estado nao for nulo ou solução
 
-            estadosJaVisitados.add(estadoAtual.jogoEmString());
-            estadoAtual.gerarFilhos(estadosJaVisitados);
+            estadosJaVisitados.add(estadoAtual.jogoEmString()); // Adiciona a lista de já visitados o estado atual e
+            estadoAtual.gerarFilhos(estadosJaVisitados);        // gera seus filhos (expande)
 
-            for (EstadoJogo filho : estadoAtual.getFilhos()) {
+            for (EstadoJogo filho : estadoAtual.getFilhos()) {  // Pega os filhos criados e adiciona a fila de estados
                 filaDeEstados.add(filho);
             }
 
-            estadoAtual = filaDeEstados.poll();
-            qtdEstadosVisitados += 1;
+            estadoAtual = filaDeEstados.poll();                 // Pega o primeiro filho da fila (menor custo) e define como estado atual
+            qtdEstadosVisitados += 1;                           // Incrementa estados visitados e volta pra condiçao while
         }
 
         if (estadoAtual == null) {
@@ -40,8 +40,6 @@ public class Busca {
             System.out.println("Solução por busca gulosa encontrada -> " + estadoAtual.jogoEmString());
             System.out.println("Quantidade de jogadas necessárias da raiz até a solução -> " + estadoAtual.getNivel());
             System.out.println("Quantidade de nós visitados -> " + qtdEstadosVisitados);
-            System.out.println("Nós Fechados -> " + (qtdEstadosVisitados - filaDeEstados.size()));
-            System.out.println("Nós Abertos -> " + filaDeEstados.size());
             System.out.println("");
 
             return obterCaminho(estadoAtual);
@@ -64,7 +62,7 @@ public class Busca {
             estadoAtual.gerarFilhos(estadosJaVisitados);
 
             for (EstadoJogo filho : estadoAtual.getFilhos()) {
-                filho.setValorTotal(estadoAtual.getNivel() + filho.calcularHeuristicaManhattan());
+                filho.setValorTotal(estadoAtual.getNivel() + filho.calcularHeuristicaManhattan()); // f(n) = g(n) + h(n);
                 filaDeEstados.add(filho);
             }
 
@@ -81,8 +79,7 @@ public class Busca {
             System.out.println("Quantidade de jogadas necessárias da raiz até a solução -> " + estadoAtual.getNivel());
             System.out.println("Quantidade de nós visitados -> " + qtdEstadosVisitados);
             System.out.println("Custo total da solução -> " + estadoAtual.getValorTotal());
-            System.out.println("Nós Abertos -> " + (qtdEstadosVisitados - filaDeEstados.size()));
-            System.out.println("Nós Fechados -> " + filaDeEstados.size());
+            System.out.println("");
 
             return obterCaminho(estadoAtual);
         }

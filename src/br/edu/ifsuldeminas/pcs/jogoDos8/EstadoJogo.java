@@ -4,14 +4,13 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Random;
-import java.util.Stack;
 
 public class EstadoJogo implements Comparable<EstadoJogo> {
 
     public EstadoJogo pai;
     private Integer jogo[][];
     private Integer valorHeuristica;
-    private Integer valorTotal; // Utilizado para o A*
+    private Integer valorTotal;
     private Integer nivel;
     private HashSet<String> estadosJaGerados;
     private ArrayList<EstadoJogo> filhos;
@@ -52,44 +51,30 @@ public class EstadoJogo implements Comparable<EstadoJogo> {
     public void addFilho(EstadoJogo clonado) {
         clonado.pai = this;
         this.filhos.add(clonado);
-        //clonado.imprimeEstado();
-        //clonado.pai.imprimeEstado();
     }
 
     public EstadoJogo clonar() {
         EstadoJogo clone = new EstadoJogo();
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
+        for (int i = 0; i < 3; i++)
+            for (int j = 0; j < 3; j++)
                 clone.jogo[i][j] = this.jogo[i][j];
-            }
-        }
         return clone;
     }
 
+    // Conta o número de inversões para verificar se o estado inicial tem solução
     static int getQuantidadeInversao(Integer[][] arr) {
         int inv_count = 0, cont = 0;
         Integer puzzle[] = new Integer[9];
 
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
+        for (int i = 0; i < 3; i++)
+            for (int j = 0; j < 3; j++)
                 puzzle[cont++] = arr[i][j];
-            }
-        }
 
         for (int i = 0; i < puzzle.length; i++) {
-            for (int j = i + 1; j < puzzle.length; j++) {
-                //System.out.println("investigando "+puzzle[i]+" e "+puzzle[j]);
-                if ((puzzle[i] > puzzle[j]) && (puzzle[i] > 0) && (puzzle[j] > 0)) {
-                    // System.out.println("o valor "+puzzle[i]+" é maior que "+puzzle[j]);
+            for (int j = i + 1; j < puzzle.length; j++)
+                if ((puzzle[i] > puzzle[j]) && (puzzle[i] > 0) && (puzzle[j] > 0))
                     inv_count++;
-                }
-            }
         }
-
-//        4 3 1
-//        7 6 0
-//        8 2 5
-        // System.out.println("inversoes "+inv_count);
         return inv_count;
     }
 
@@ -97,11 +82,11 @@ public class EstadoJogo implements Comparable<EstadoJogo> {
     public boolean temSolucao(Integer[][] puzzle) {
         // conta quantas inversoes tem no quebra cabeca
         int invCount = getQuantidadeInversao(puzzle);
-
-        // retorna true se a quantidad de inversao for par, ou seja, é possível resolver
+        // retorna true se a quantidade de inversao for par, ou seja, é possível resolver
         return (invCount % 2 == 0);
     }
 
+    // Gera um estado inicial aleatório e verifica se tem solução
     public void gerarEstadoInicial() {
         HashSet<Integer> numeros = new HashSet<>();
         Random gerador = new Random();
@@ -113,9 +98,8 @@ public class EstadoJogo implements Comparable<EstadoJogo> {
                     while (true) {
                         int numeroGerado = gerador.nextInt(9);
                         this.jogo[i][j] = (numeroGerado == 0) ? 0 : numeroGerado;
-                        if (numeros.add(this.jogo[i][j])) {
+                        if (numeros.add(this.jogo[i][j]))
                             break;
-                        }
                     }
                 }
             }
@@ -171,7 +155,6 @@ public class EstadoJogo implements Comparable<EstadoJogo> {
 
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                //String aux = (this.jogo[i][j] == null) ? "0" : this.jogo[i][j].toString();
                 String aux = this.jogo[i][j].toString();
                 jogoString = jogoString.concat(aux);
             }
@@ -250,7 +233,6 @@ public class EstadoJogo implements Comparable<EstadoJogo> {
                 addFilho(clone);
             }
         }
-        //System.out.println("to no nivel "+this.nivel);
         return this.filhos;
     }
 
@@ -266,22 +248,11 @@ public class EstadoJogo implements Comparable<EstadoJogo> {
 
     // Verifica se o estado final é um estado final
     public boolean ehEstadoFinal() {
-
-        // 0 1 2 3 4 5 6 7 8
         if (Objects.equals(jogo[0][0], 0) && Objects.equals(jogo[0][1], 1) && Objects.equals(jogo[0][2], 2)
                 && Objects.equals(jogo[1][0], 3) && Objects.equals(jogo[1][1], 4) && Objects.equals(jogo[1][2], 5)
                 && Objects.equals(jogo[2][0], 6) && Objects.equals(jogo[2][1], 7) && Objects.equals(jogo[2][2], 8)) {
             return true;
         }
-
-        // 1 2 3 4 5 6 7 8 0
-        /*
-         if (Objects.equals(jogo[0][0], 1) && Objects.equals(jogo[0][1], 2) && Objects.equals(jogo[0][2], 3)
-         && Objects.equals(jogo[1][0], 4) && Objects.equals(jogo[1][1], 5) && Objects.equals(jogo[1][2], 6)
-         && Objects.equals(jogo[2][0], 7) && Objects.equals(jogo[2][1], 8) && Objects.equals(jogo[2][2], 0)) {
-         return true;
-         }
-         */
         return false;
     }
 
@@ -319,51 +290,38 @@ public class EstadoJogo implements Comparable<EstadoJogo> {
 
     public void imprimeEstado() {
         for (int i = 0; i < jogoEmString().length(); i++) {
-            if (i == 3 || i == 6) {
+            if (i == 3 || i == 6)
                 System.out.print("\n" + jogoEmString().charAt(i));
-            } else {
+            else
                 System.out.print(jogoEmString().charAt(i));
-            }
         }
         System.out.println("\n");
     }
 
     @Override
     public int compareTo(EstadoJogo t) {
-
         if (valorTotal == null) {
-
-            if (t.getValorHeuristica() < getValorHeuristica()) {
+            if (t.getValorHeuristica() < getValorHeuristica())
                 return 1;
-            }
-            if (t.getValorHeuristica() > getValorHeuristica()) {
+            if (t.getValorHeuristica() > getValorHeuristica())
                 return -1;
-            }
             if (Objects.equals(t.getValorHeuristica(), getValorHeuristica())) {
-                if (t.getNivel() < getNivel()) {
+                if (t.getNivel() < getNivel())
                     return -1;
-                }
-                if (t.getNivel() > getNivel()) {
+                if (t.getNivel() > getNivel())
                     return 1;
-                }
             }
             return 0;
-
         } else {
-
-            if (t.getValorTotal() < valorTotal) {
+            if (t.getValorTotal() < valorTotal)
                 return 1;
-            }
-            if (t.getValorTotal() > valorTotal) {
+            if (t.getValorTotal() > valorTotal)
                 return -1;
-            }
             if (Objects.equals(t.getValorTotal(), valorTotal)) {
-                if (t.getNivel() < nivel) {
+                if (t.getNivel() < nivel)
                     return 1;
-                }
-                if (t.getNivel() > nivel) {
+                if (t.getNivel() > nivel)
                     return -1;
-                }
             }
             return 0;
         }

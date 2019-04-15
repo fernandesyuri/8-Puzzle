@@ -1,6 +1,5 @@
 package br.edu.ifsuldeminas.pcs.jogoDos8;
 
-import java.awt.Button;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -12,12 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author Yuri Fernandes
- */
 public class JogoView extends JFrame {
-
     // Cores sobre os botões que representam as casas do tabuleiro.
     private static final Color COR_FUNDO_BOTAO = new Color(66, 134, 244);
     private static final Color COR_FUNDO_BOTAO_PRESSIONADO = Color.LIGHT_GRAY;
@@ -50,11 +44,11 @@ public class JogoView extends JFrame {
         this.flag = flag;
         this.caminho = caminho;
 
-        if (flag) {
+        if (flag) { // Se flag == true -> jogador jogando
             this.botaoUm = new JButton();
             this.botaoDois = new JButton("Desistir");
             this.botaoTres = new JButton();
-        } else {
+        } else { // Caso contrário -> IA jogando
             this.botaoUm = new JButton("Avançar");
             this.botaoDois = new JButton("Voltar");
             this.botaoTres = new JButton("Solução");
@@ -80,20 +74,17 @@ public class JogoView extends JFrame {
      * @param estado Estado do jogo
      */
     public final void reposicionarCasas(EstadoJogo estado) {
-
         // Remove tudo o que já está no tabuleiro
         if (casas != null) {
-            for (JButton[] linha : casas) {
-                for (JButton casa : linha) {
+            for (JButton[] linha : casas)
+                for (JButton casa : linha)
                     remove(casa);
-                }
-            }
         }
 
         casas = new JButton[3][3];
 
         // Posiciona as novas casas no tabuleiro
-        if (flag) {
+        if (flag) { // Novamente verifica se jogador esta jogando
             for (int i = 0; i < 3; i++) {
                 for (int j = 0; j < 3; j++) {
                     casas[i][j] = new JButton(estado.getJogo()[i][j] != 0 ? estado.getJogo()[i][j].toString() : "");
@@ -104,28 +95,28 @@ public class JogoView extends JFrame {
                     add(casas[i][j]); // Adiciona casa na janela gráfica.
                 }
             }
-        } else {
+        } else { // Caso contrario
             for (int i = 0; i < 3; i++) {
                 for (int j = 0; j < 3; j++) {
                     casas[i][j] = new JButton(estado.getJogo()[i][j] != 0 ? estado.getJogo()[i][j].toString() : "");
                     casas[i][j].setBackground(COR_FUNDO_BOTAO);
                     casas[i][j].setForeground(COR_NUMERO_BOTAO);
                     casas[i][j].setFont(FONTE_BOTAO);
-                    casas[i][j].setEnabled(false);
+                    casas[i][j].setEnabled(false); // Botoes desabilitados pois quem esta jogando é a IA
                     addEvento(casas[i][j]);
-                    add(casas[i][j]); // Adiciona casa na janela gráfica.
+                    add(casas[i][j]);
                 }
             }
         }
 
         estadoAtual = estado;
 
-        if (flag) {
+        if (flag) { // Se o jogador estiver jogando, tera apenas o botao de desistir
             botaoUm.setEnabled(false);
             botaoTres.setEnabled(false);
             addEvent(botaoDois);
-        } else {
-            botaoUm.addActionListener((ActionEvent ae) -> {
+        } else { // Caso contrario adiciona os botoes de Avançar, Voltar e Solução
+            botaoUm.addActionListener((ActionEvent ae) -> { // Avançar mostra o próximo passo da solução
                 if (aux != caminho.size() - 1) {
                     aux++;
                     for (int i = 0; i < 3; i++) {
@@ -135,7 +126,7 @@ public class JogoView extends JFrame {
                     }
                 }
             });
-            botaoDois.addActionListener((ActionEvent ae) -> {
+            botaoDois.addActionListener((ActionEvent ae) -> { // Voltar mostra o passo anterior da solução
                 if (aux != 0) {
                     aux--;
                     for (int i = 0; i < 3; i++) {
@@ -145,20 +136,18 @@ public class JogoView extends JFrame {
                     }
                 }
             });
-            botaoTres.addActionListener((ActionEvent ae) -> {
+            botaoTres.addActionListener((ActionEvent ae) -> { // Solução vai para o estado final
                 for (int i = 0; i < 3; i++) {
                     for (int j = 0; j < 3; j++) {
                         casas[i][j].setText(caminho.get(caminho.size() - 1).getJogo()[i][j] != 0 ? caminho.get(caminho.size() - 1).getJogo()[i][j].toString() : "");
                     }
                 }
-                
-                botaoUm.setEnabled(false);
+                botaoUm.setEnabled(false); // Se clicou em Solução nao pode mais avançar nem voltar
                 botaoDois.setEnabled(false);
                 botaoTres.setEnabled(false);
             });
 
         }
-
         botaoUm.setFont(FONTE_BOTAODOIS);
         botaoDois.setFont(FONTE_BOTAODOIS);
         botaoTres.setFont(FONTE_BOTAODOIS);
@@ -173,7 +162,7 @@ public class JogoView extends JFrame {
     }
 
     private void addEvent(JButton botao) {
-        botao.addActionListener((ActionEvent ae) -> {
+        botao.addActionListener((ActionEvent ae) -> { // Se o usuário desistiu, vez da IA
             setVisible(false);
             JogoView viewIA = new JogoView(estadoInicial, false, caminho);
         });
@@ -186,10 +175,8 @@ public class JogoView extends JFrame {
             if (primeiroBotaoPressionado == null) {
                 primeiroBotaoPressionado = casa;
                 primeiroBotaoPressionado.setBackground(COR_FUNDO_BOTAO_PRESSIONADO);
-                //System.out.println("Primeiro botão pressionado: " + casa.getText());
 
             } else if (!primeiroBotaoPressionado.getText().equals(casa.getText())) {
-
                 // Procurando a posição das casas na matriz
                 int i1 = -1, j1 = -1, i2 = -1, j2 = -1;
                 for (int i = 0; i < 3; i++) {
@@ -244,7 +231,7 @@ public class JogoView extends JFrame {
                         // Verifica se atingiu um estado final
                         if (estadoAtual.ehEstadoFinal()) {
                             JOptionPane.showMessageDialog(this, "Fim de jogo! Total de jogadas: " + contadorJogadas);
-                            setVisible(false);
+                            setVisible(false); // Se chegou no objetivo, vez da IA
                             JogoView viewIA = new JogoView(estadoInicial, false, caminho);
                         }
                         break;
@@ -254,9 +241,6 @@ public class JogoView extends JFrame {
                 primeiroBotaoPressionado.setBackground(COR_FUNDO_BOTAO);
                 primeiroBotaoPressionado = null;
                 estadoAtual.resetarEstadosJaGerados();
-
-                System.out.println("Primeiro botão pressionado: " + i1 + "," + j1);
-                System.out.println("Segundo botão pressionado: " + i2 + "," + j2);
             } else {
                 // Clicou no mesmo botão duas vezes
                 primeiroBotaoPressionado.setBackground(COR_FUNDO_BOTAO);
