@@ -66,7 +66,7 @@
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jBtnRdn" pref="129" max="32767" attributes="0"/>
+                      <Component id="jBtnRdn" pref="135" max="32767" attributes="0"/>
                       <Component id="jBtnMan" alignment="0" max="32767" attributes="0"/>
                       <Group type="102" attributes="0">
                           <Component id="jLabel4" min="-2" max="-2" attributes="0"/>

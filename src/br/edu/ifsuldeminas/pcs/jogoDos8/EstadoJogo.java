@@ -94,7 +94,7 @@ public class EstadoJogo implements Comparable<EstadoJogo> {
     }
 
     // Retorna true se o quebra cabeca tiver solucao
-    private boolean temSolucao(Integer[][] puzzle) {
+    public boolean temSolucao(Integer[][] puzzle) {
         // conta quantas inversoes tem no quebra cabeca
         int invCount = getQuantidadeInversao(puzzle);
 
