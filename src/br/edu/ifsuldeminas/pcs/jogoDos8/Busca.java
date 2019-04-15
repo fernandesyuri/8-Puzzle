@@ -40,6 +40,8 @@ public class Busca {
             System.out.println("Solução por busca gulosa encontrada -> " + estadoAtual.jogoEmString());
             System.out.println("Quantidade de jogadas necessárias da raiz até a solução -> " + estadoAtual.getNivel());
             System.out.println("Quantidade de nós visitados -> " + qtdEstadosVisitados);
+            System.out.println("Nós Fechados -> " + (qtdEstadosVisitados-filaDeEstados.size()));
+            System.out.println("Nós Abertos -> " + filaDeEstados.size());
             System.out.println("");
 
             return obterCaminho(estadoAtual);
@@ -79,6 +81,8 @@ public class Busca {
             System.out.println("Quantidade de jogadas necessárias da raiz até a solução -> " + estadoAtual.getNivel());
             System.out.println("Quantidade de nós visitados -> " + qtdEstadosVisitados);
             System.out.println("Custo total da solução -> " + estadoAtual.getValorTotal());
+            System.out.println("Nós Abertos -> " + (qtdEstadosVisitados-filaDeEstados.size()));
+            System.out.println("Nós Fechados -> " + filaDeEstados.size());
             
             return obterCaminho(estadoAtual);
         }

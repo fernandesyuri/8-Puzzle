@@ -268,7 +268,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jBtnExitActionPerformed
 
     private void jBtnGoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnGoActionPerformed
-        JogoView viewJogador = new JogoView(jogoAtual);
+        JogoView viewJogador = new JogoView(jogoAtual, true);
         Busca busca = new Busca();
         
         if(jComboSelect.getSelectedIndex() == 0)

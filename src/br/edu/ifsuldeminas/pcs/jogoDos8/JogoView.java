@@ -23,13 +23,14 @@ public class JogoView extends JFrame {
     private static final Color COR_FUNDO_BOTAO_PRESSIONADO = Color.LIGHT_GRAY;
     private static final Color COR_NUMERO_BOTAO = /*Color.WHITE*/ Color.BLACK;
     private static final Font FONTE_BOTAO = new Font("Tahoma", Font.PLAIN, 60);
-    private static final Font FONTE_BOTAODOIS = new Font("Tahoma", Font.PLAIN, 40);
+    private static final Font FONTE_BOTAODOIS = new Font("Tahoma", Font.PLAIN, 35);
     private EstadoJogo estadoAtual;
     private JButton casas[][]; // Representa as casas no tabuleiro.
     private JButton primeiroBotaoPressionado;
-    private final JButton desistir, d1, d2;
+    private final JButton botaoUm, botaoDois, botaoTres;
     private int contadorJogadas;
     private int qtdJogadasIA;
+    private boolean flag;
 
     /**
      * Permite criar uma janela gráfica que representa o tabuleiro do jogo da
@@ -37,14 +38,23 @@ public class JogoView extends JFrame {
      *
      * @param estadoInicial Matriz de integer 3x3
      */
-    public JogoView(EstadoJogo estadoInicial) {
+    public JogoView(EstadoJogo estadoInicial, boolean flag) {
         this.estadoAtual = estadoInicial;
         this.primeiroBotaoPressionado = null;
         this.contadorJogadas = 0;
         this.qtdJogadasIA = 0;
-        this.desistir = new JButton("Desistir");
-        this.d1 = new JButton();
-        this.d2 = new JButton();
+        this.flag = flag;
+        
+        if(flag) {
+            this.botaoUm = new JButton();
+            this.botaoDois = new JButton("Desistir");
+            this.botaoTres = new JButton();
+        } else {
+            this.botaoUm = new JButton("Avançar");
+            this.botaoDois = new JButton("Voltar");
+            this.botaoTres = new JButton("INFO");
+        }
+        
         inicializarJanela();
         reposicionarCasas(estadoInicial);
     }
@@ -91,21 +101,36 @@ public class JogoView extends JFrame {
         }
 
         estadoAtual = estado;
-        d1.setEnabled(false);
-        d2.setEnabled(false);
-        desistir.setFont(FONTE_BOTAODOIS);
+
+        if(flag) {
+            botaoUm.setEnabled(false);
+            botaoTres.setEnabled(false);
+            addEvent(botaoDois);
+        } 
         
-        add(d1);
-        add(desistir);
-        add(d2);
+        botaoUm.setFont(FONTE_BOTAODOIS);
+        botaoDois.setFont(FONTE_BOTAODOIS);
+        botaoTres.setFont(FONTE_BOTAODOIS);
+
+        add(botaoUm);
+        add(botaoDois);
+        add(botaoTres);
         
         // Atualiza a view
         revalidate();
         repaint();
     }
 
+    private void addEvent(JButton botao) 
+    {
+        botao.addActionListener((ActionEvent ae) -> {
+            setVisible(false);
+            JogoView viewIA = new JogoView(estadoAtual, false);
+        });
+    }
+    
     private void addEvento(JButton casa) {
-
+        
         casa.addActionListener((ActionEvent ae) -> {
 
             if (primeiroBotaoPressionado == null) {
