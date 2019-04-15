@@ -38,8 +38,6 @@ public class ViewPrincipal extends javax.swing.JFrame {
         jBtnMan = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jComboSelect = new javax.swing.JComboBox<>();
-        jLabel4 = new javax.swing.JLabel();
-        jComboControl = new javax.swing.JComboBox<>();
         jBtnGo = new javax.swing.JButton();
         jBtnExit = new javax.swing.JButton();
 
@@ -88,11 +86,6 @@ public class ViewPrincipal extends javax.swing.JFrame {
 
         jComboSelect.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Busca Gulosa", "A*" }));
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jLabel4.setText("Controle Jogadas IA:");
-
-        jComboControl.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Manual", "Automático" }));
-
         jBtnGo.setText("Iniciar");
         jBtnGo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -128,11 +121,8 @@ public class ViewPrincipal extends javax.swing.JFrame {
                         .addComponent(jBtn02)))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jBtnRdn, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)
-                    .addComponent(jBtnMan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                    .addComponent(jBtnRdn, javax.swing.GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE)
+                    .addComponent(jBtnMan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(jLabel1)
@@ -152,9 +142,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
                     .addComponent(jBtnGo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jComboSelect, 0, 129, Short.MAX_VALUE))
                 .addGap(18, 18, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jComboControl, 0, 129, Short.MAX_VALUE)
-                    .addComponent(jBtnExit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addComponent(jBtnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -181,13 +169,9 @@ public class ViewPrincipal extends javax.swing.JFrame {
                     .addComponent(jBtn21)
                     .addComponent(jBtn22))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel4))
+                .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboSelect, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboControl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jComboSelect, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jBtnGo)
@@ -350,12 +334,10 @@ public class ViewPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton jBtnGo;
     private javax.swing.JButton jBtnMan;
     private javax.swing.JButton jBtnRdn;
-    private javax.swing.JComboBox<String> jComboControl;
     private javax.swing.JComboBox<String> jComboSelect;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 

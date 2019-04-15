@@ -151,6 +151,10 @@ public class JogoView extends JFrame {
                         casas[i][j].setText(caminho.get(caminho.size() - 1).getJogo()[i][j] != 0 ? caminho.get(caminho.size() - 1).getJogo()[i][j].toString() : "");
                     }
                 }
+                
+                botaoUm.setEnabled(false);
+                botaoDois.setEnabled(false);
+                botaoTres.setEnabled(false);
             });
 
         }
