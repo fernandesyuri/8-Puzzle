@@ -277,9 +277,8 @@ public class ViewPrincipal extends javax.swing.JFrame {
 
         if (jogoAtual.temSolucao(jogoAtual.getJogo())) {
 
-            JogoView viewJogador = new JogoView(jogoAtual, true);
             Busca busca = new Busca();
-
+            
             if (jComboSelect.getSelectedIndex() == 0) {
                 this.tipoBusca = 0;
             } else {
@@ -299,10 +298,12 @@ public class ViewPrincipal extends javax.swing.JFrame {
                     break;
                 case 1:
                     caminho = busca.Aestrela(jogoAtual);
-                    viewJogador.setQtdJogadasIA(caminho.get(caminho.size() - 1).getNivel());
                     jogoAtual.resetarEstadosJaGerados();
                     break;
             }
+            
+            new JogoView(jogoAtual, true, caminho);
+
         } else {
             JOptionPane.showMessageDialog(null, "Não existe solução para este estado. Insira outro estado.");
             jBtnGo.setEnabled(false);

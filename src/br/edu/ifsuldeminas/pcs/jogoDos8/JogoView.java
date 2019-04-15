@@ -31,6 +31,8 @@ public class JogoView extends JFrame {
     private int contadorJogadas;
     private int qtdJogadasIA;
     private boolean flag;
+    private ArrayList<EstadoJogo> caminho;
+    private int aux = 1;
 
     /**
      * Permite criar uma janela gráfica que representa o tabuleiro do jogo da
@@ -38,13 +40,14 @@ public class JogoView extends JFrame {
      *
      * @param estadoInicial Matriz de integer 3x3
      */
-    public JogoView(EstadoJogo estadoInicial, boolean flag) {
+    public JogoView(EstadoJogo estadoInicial, boolean flag, ArrayList<EstadoJogo> caminho) {
         this.estadoAtual = estadoInicial;
         this.primeiroBotaoPressionado = null;
         this.contadorJogadas = 0;
         this.qtdJogadasIA = 0;
         this.flag = flag;
-
+        this.caminho = caminho;
+        
         if (flag) {
             this.botaoUm = new JButton();
             this.botaoDois = new JButton("Desistir");
@@ -108,7 +111,14 @@ public class JogoView extends JFrame {
             addEvent(botaoDois);
         } else {
             botaoUm.addActionListener((ActionEvent ae) -> {
-                System.out.println("um apertado");
+                for(int i = 0; i < 3; i++) {
+                    for(int j = 0; j < 3; j++) {
+                        if(caminho.get(aux) != null) {
+                            casas[i][j].setText(caminho.get(aux).getJogo()[i][j] != 0 ? caminho.get(aux).getJogo()[i][j].toString() : "");
+                        }
+                    }
+                }
+                aux++;
             });
             botaoDois.addActionListener((ActionEvent ae) -> {
                 System.out.println("dois apertado");
@@ -135,8 +145,7 @@ public class JogoView extends JFrame {
     private void addEvent(JButton botao) {
         botao.addActionListener((ActionEvent ae) -> {
             setVisible(false);
-            JogoView viewIA = new JogoView(estadoAtual, false);
-            System.out.println("teste");
+            JogoView viewIA = new JogoView(estadoAtual, false, caminho);
         });
     }
 
@@ -207,7 +216,7 @@ public class JogoView extends JFrame {
                             JOptionPane.showMessageDialog(this, "Fim de jogo! Total de jogadas: " + contadorJogadas);
 
                             setVisible(false);
-                            JogoView viewIA = new JogoView(estadoAtual, false);
+                            JogoView viewIA = new JogoView(estadoAtual, false, caminho);
                         }
                         break;
                     }
