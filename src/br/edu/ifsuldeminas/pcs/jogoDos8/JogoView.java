@@ -25,6 +25,7 @@ public class JogoView extends JFrame {
     private static final Font FONTE_BOTAO = new Font("Tahoma", Font.PLAIN, 60);
     private static final Font FONTE_BOTAODOIS = new Font("Tahoma", Font.PLAIN, 35);
     private EstadoJogo estadoAtual;
+    private EstadoJogo estadoInicial;
     private JButton casas[][]; // Representa as casas no tabuleiro.
     private JButton primeiroBotaoPressionado;
     private final JButton botaoUm, botaoDois, botaoTres;
@@ -32,7 +33,7 @@ public class JogoView extends JFrame {
     private int qtdJogadasIA;
     private boolean flag;
     private ArrayList<EstadoJogo> caminho;
-    private int aux = 1;
+    private int aux = 0;
 
     /**
      * Permite criar uma janela gráfica que representa o tabuleiro do jogo da
@@ -42,6 +43,7 @@ public class JogoView extends JFrame {
      */
     public JogoView(EstadoJogo estadoInicial, boolean flag, ArrayList<EstadoJogo> caminho) {
         this.estadoAtual = estadoInicial;
+        this.estadoInicial = estadoInicial;
         this.primeiroBotaoPressionado = null;
         this.contadorJogadas = 0;
         this.qtdJogadasIA = 0;
@@ -111,17 +113,24 @@ public class JogoView extends JFrame {
             addEvent(botaoDois);
         } else {
             botaoUm.addActionListener((ActionEvent ae) -> {
-                for(int i = 0; i < 3; i++) {
-                    for(int j = 0; j < 3; j++) {
-                        if(caminho.get(aux) != null) {
+                if(aux != caminho.size()-1) {
+                    aux++;
+                    for(int i = 0; i < 3; i++) {
+                        for(int j = 0; j < 3; j++) {
                             casas[i][j].setText(caminho.get(aux).getJogo()[i][j] != 0 ? caminho.get(aux).getJogo()[i][j].toString() : "");
                         }
                     }
                 }
-                aux++;
             });
             botaoDois.addActionListener((ActionEvent ae) -> {
-                System.out.println("dois apertado");
+                if(aux != 0) {
+                    aux--;
+                    for(int i = 0; i < 3; i++) {
+                        for(int j = 0; j < 3; j++) {
+                            casas[i][j].setText(caminho.get(aux).getJogo()[i][j] != 0 ? caminho.get(aux).getJogo()[i][j].toString() : "");
+                        }
+                    }
+                }
             });
             botaoTres.addActionListener((ActionEvent ae) -> {
                 System.out.println("tres apertado");
@@ -145,7 +154,7 @@ public class JogoView extends JFrame {
     private void addEvent(JButton botao) {
         botao.addActionListener((ActionEvent ae) -> {
             setVisible(false);
-            JogoView viewIA = new JogoView(estadoAtual, false, caminho);
+            JogoView viewIA = new JogoView(estadoInicial, false, caminho);
         });
     }
 
@@ -214,9 +223,8 @@ public class JogoView extends JFrame {
                         // Verifica se atingiu um estado final
                         if (estadoAtual.ehEstadoFinal()) {
                             JOptionPane.showMessageDialog(this, "Fim de jogo! Total de jogadas: " + contadorJogadas);
-
                             setVisible(false);
-                            JogoView viewIA = new JogoView(estadoAtual, false, caminho);
+                            JogoView viewIA = new JogoView(estadoInicial, false, caminho);
                         }
                         break;
                     }
