@@ -285,12 +285,6 @@ public class ViewPrincipal extends javax.swing.JFrame {
                 this.tipoBusca = 1;
             }
 
-            if (jComboControl.getSelectedIndex() == 0) {
-                this.tipoControle = 0;
-            } else {
-                this.tipoControle = 1;
-            }
-
             switch (this.tipoBusca) {
                 case 0:
                     caminho = busca.buscaGulosa(jogoAtual);
@@ -301,7 +295,6 @@ public class ViewPrincipal extends javax.swing.JFrame {
                     jogoAtual.resetarEstadosJaGerados();
                     break;
             }
-            
             new JogoView(jogoAtual, true, caminho);
 
         } else {

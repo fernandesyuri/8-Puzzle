@@ -49,7 +49,7 @@ public class JogoView extends JFrame {
         this.qtdJogadasIA = 0;
         this.flag = flag;
         this.caminho = caminho;
-        
+
         if (flag) {
             this.botaoUm = new JButton();
             this.botaoDois = new JButton("Desistir");
@@ -57,7 +57,7 @@ public class JogoView extends JFrame {
         } else {
             this.botaoUm = new JButton("Avançar");
             this.botaoDois = new JButton("Voltar");
-            this.botaoTres = new JButton("INFO");
+            this.botaoTres = new JButton("Solução");
         }
 
         inicializarJanela();
@@ -93,15 +93,28 @@ public class JogoView extends JFrame {
         casas = new JButton[3][3];
 
         // Posiciona as novas casas no tabuleiro
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                casas[i][j] = new JButton(estado.getJogo()[i][j] != 0 ? estado.getJogo()[i][j].toString() : "");
-                casas[i][j].setBackground(COR_FUNDO_BOTAO);
-                casas[i][j].setForeground(COR_NUMERO_BOTAO);
-                casas[i][j].setFont(FONTE_BOTAO);
-                addEvento(casas[i][j]);
-
-                add(casas[i][j]); // Adiciona casa na janela gráfica.
+        if (flag) {
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    casas[i][j] = new JButton(estado.getJogo()[i][j] != 0 ? estado.getJogo()[i][j].toString() : "");
+                    casas[i][j].setBackground(COR_FUNDO_BOTAO);
+                    casas[i][j].setForeground(COR_NUMERO_BOTAO);
+                    casas[i][j].setFont(FONTE_BOTAO);
+                    addEvento(casas[i][j]);
+                    add(casas[i][j]); // Adiciona casa na janela gráfica.
+                }
+            }
+        } else {
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    casas[i][j] = new JButton(estado.getJogo()[i][j] != 0 ? estado.getJogo()[i][j].toString() : "");
+                    casas[i][j].setBackground(COR_FUNDO_BOTAO);
+                    casas[i][j].setForeground(COR_NUMERO_BOTAO);
+                    casas[i][j].setFont(FONTE_BOTAO);
+                    casas[i][j].setEnabled(false);
+                    addEvento(casas[i][j]);
+                    add(casas[i][j]); // Adiciona casa na janela gráfica.
+                }
             }
         }
 
@@ -113,29 +126,33 @@ public class JogoView extends JFrame {
             addEvent(botaoDois);
         } else {
             botaoUm.addActionListener((ActionEvent ae) -> {
-                if(aux != caminho.size()-1) {
+                if (aux != caminho.size() - 1) {
                     aux++;
-                    for(int i = 0; i < 3; i++) {
-                        for(int j = 0; j < 3; j++) {
+                    for (int i = 0; i < 3; i++) {
+                        for (int j = 0; j < 3; j++) {
                             casas[i][j].setText(caminho.get(aux).getJogo()[i][j] != 0 ? caminho.get(aux).getJogo()[i][j].toString() : "");
                         }
                     }
                 }
             });
             botaoDois.addActionListener((ActionEvent ae) -> {
-                if(aux != 0) {
+                if (aux != 0) {
                     aux--;
-                    for(int i = 0; i < 3; i++) {
-                        for(int j = 0; j < 3; j++) {
+                    for (int i = 0; i < 3; i++) {
+                        for (int j = 0; j < 3; j++) {
                             casas[i][j].setText(caminho.get(aux).getJogo()[i][j] != 0 ? caminho.get(aux).getJogo()[i][j].toString() : "");
                         }
                     }
                 }
             });
             botaoTres.addActionListener((ActionEvent ae) -> {
-                System.out.println("tres apertado");
+                for (int i = 0; i < 3; i++) {
+                    for (int j = 0; j < 3; j++) {
+                        casas[i][j].setText(caminho.get(caminho.size() - 1).getJogo()[i][j] != 0 ? caminho.get(caminho.size() - 1).getJogo()[i][j].toString() : "");
+                    }
+                }
             });
-            
+
         }
 
         botaoUm.setFont(FONTE_BOTAODOIS);
