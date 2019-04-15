@@ -137,14 +137,12 @@ public class JogoView extends JFrame {
                 }
             });
             botaoTres.addActionListener((ActionEvent ae) -> { // Solução vai para o estado final
+                aux = caminho.size() -1;
                 for (int i = 0; i < 3; i++) {
                     for (int j = 0; j < 3; j++) {
-                        casas[i][j].setText(caminho.get(caminho.size() - 1).getJogo()[i][j] != 0 ? caminho.get(caminho.size() - 1).getJogo()[i][j].toString() : "");
+                        casas[i][j].setText(caminho.get(aux).getJogo()[i][j] != 0 ? caminho.get(aux).getJogo()[i][j].toString() : "");
                     }
                 }
-                botaoUm.setEnabled(false); // Se clicou em Solução nao pode mais avançar nem voltar
-                botaoDois.setEnabled(false);
-                botaoTres.setEnabled(false);
             });
 
         }

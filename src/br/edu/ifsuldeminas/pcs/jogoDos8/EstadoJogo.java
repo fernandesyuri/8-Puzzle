@@ -307,9 +307,9 @@ public class EstadoJogo implements Comparable<EstadoJogo> {
                 return -1;
             if (Objects.equals(t.getValorHeuristica(), getValorHeuristica())) {
                 if (t.getNivel() < getNivel())
-                    return -1;
-                if (t.getNivel() > getNivel())
                     return 1;
+                if (t.getNivel() > getNivel())
+                    return -1;
             }
             return 0;
         } else {

@@ -200,7 +200,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBtnRndActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnRndActionPerformed
-        EstadoJogo estado = new EstadoJogo();
+        EstadoJogo estado = new EstadoJogo();  // Gera um jogo aleatório com verificação se tem solução
         estado.gerarEstadoInicial();
         jogo = new String();
         jogo = estado.jogoEmString();
@@ -220,7 +220,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jBtnRndActionPerformed
 
     private void jBtnManActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnManActionPerformed
-        CadastroManual cadastro = new CadastroManual(this);
+        CadastroManual cadastro = new CadastroManual(this); // Gera um jogo a partir  de uma entrada manual de dados
         cadastro.setVisible(true);
     }//GEN-LAST:event_jBtnManActionPerformed
 
@@ -256,9 +256,7 @@ public class ViewPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jBtnExitActionPerformed
 
     private void jBtnGoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnGoActionPerformed
-
         if (jogoAtual.temSolucao(jogoAtual.getJogo())) {
-
             Busca busca = new Busca();
             
             if (jComboSelect.getSelectedIndex() == 0) {
